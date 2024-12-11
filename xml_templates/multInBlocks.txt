@@ -1,0 +1,3 @@
+CDL.Reals.MultiMax
+CDL.Reals.MultiMin
+CDL.Reals.MultiSum

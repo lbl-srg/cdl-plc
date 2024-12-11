@@ -1,0 +1,1 @@
+<instances><configurations><configuration name="config"><resource name="resource1"><task name="task0" priority="0" interval="T#20ms"><pouInstance name="instance0" typeName="{{ programs[0] }}"/></task></resource></configuration></configurations></instances>

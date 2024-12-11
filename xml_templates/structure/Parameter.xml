@@ -1,0 +1,1 @@
+<variable name="{{ key }}"><type><{{ values.valueType }}/></type><initialValue><simpleValue value="{{ values.value }}"/></initialValue></variable>

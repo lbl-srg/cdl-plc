@@ -1,0 +1,1 @@
+<outVariable localId="{{ values.localId }}" executionOrderId="0" width="10" height="10" negated="false"><position x="{{ values.x }}" y="{{ values.y }}"/><connectionPointIn><relPosition x="0" y="22"/><connection refLocalId="{{ values.inputFrom.y.id }}" formalParameter="{{ values.inputFrom.y.link }}"/></connectionPointIn><expression>{{ key }}</expression></outVariable>

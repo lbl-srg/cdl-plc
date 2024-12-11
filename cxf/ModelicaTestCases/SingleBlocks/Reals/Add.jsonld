@@ -1,0 +1,77 @@
+{
+  "@context": {
+    "S231P": "https://data.ashrae.org/S231P#"
+  },
+  "@graph": [
+    {
+      "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.Add",
+      "@type": "S231P:Block",
+      "S231P:containsBlock": {
+        "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.Add.add2"
+      },
+      "S231P:hasInput": [
+        {
+          "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.Add.u1"
+        },
+        {
+          "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.Add.u2"
+        }
+      ],
+      "S231P:hasOutput": {
+        "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.Add.y1"
+      },
+      "S231P:label": "Add"
+    },
+    {
+      "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.Add.add2",
+      "@type": "https://data.ashrae.org/S231P#Buildings.Controls.OBC.CDL.Reals.Add",
+      "S231P:accessSpecifier": "public",
+      "S231P:graphics": "{\"Placement\":{\"transformation\":{\"extent\":[{\"x\":-8,\"y\":-10},{\"x\":12,\"y\":10}]}}}",
+      "S231P:hasInstance": [
+        {
+          "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.Add.add2.u1"
+        },
+        {
+          "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.Add.add2.u2"
+        },
+        {
+          "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.Add.add2.y"
+        }
+      ],
+      "S231P:label": "add2"
+    },
+    {
+      "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.Add.add2.y",
+      "S231P:isConnectedTo": {
+        "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.Add.y1"
+      }
+    },
+    {
+      "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.Add.u1",
+      "@type": "S231P:RealInput",
+      "S231P:accessSpecifier": "public",
+      "S231P:graphics": "{\"Placement\":{\"transformation\":{\"extent\":[{\"x\":-120,\"y\":0},{\"x\":-80,\"y\":40}]}}}",
+      "S231P:isConnectedTo": {
+        "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.Add.add2.u1"
+      },
+      "S231P:label": "u1"
+    },
+    {
+      "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.Add.u2",
+      "@type": "S231P:RealInput",
+      "S231P:accessSpecifier": "public",
+      "S231P:graphics": "{\"Placement\":{\"transformation\":{\"extent\":[{\"x\":-120,\"y\":-40},{\"x\":-80,\"y\":0}]}}}",
+      "S231P:isConnectedTo": {
+        "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.Add.add2.u2"
+      },
+      "S231P:label": "u2"
+    },
+    {
+      "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.Add.y1",
+      "@type": "S231P:RealOutput",
+      "S231P:accessSpecifier": "public",
+      "S231P:graphics": "{\"Placement\":{\"transformation\":{\"extent\":[{\"x\":72,\"y\":-20},{\"x\":112,\"y\":20}]}}}",
+      "S231P:label": "y1"
+    }
+  ]
+}

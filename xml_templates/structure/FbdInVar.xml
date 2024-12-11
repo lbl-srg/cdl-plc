@@ -1,0 +1,1 @@
+<inVariable localId="{{ values.localId }}" executionOrderId="0" width="10" height="10" negated="false"><position x="{{ values.x }}" y="{{ values.y }}"/><connectionPointOut><relPosition x="42" y="13"/></connectionPointOut><expression>{{ key }}</expression></inVariable>

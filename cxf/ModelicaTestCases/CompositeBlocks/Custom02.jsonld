@@ -1,0 +1,144 @@
+{
+  "@context": {
+    "S231P": "https://data.ashrae.org/S231P#"
+  },
+  "@graph": [
+    {
+      "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.Custom02",
+      "@type": "S231P:Block",
+      "S231P:containsBlock": [
+        {
+          "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.Custom02.gain"
+        },
+        {
+          "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.Custom02.gain1"
+        }
+      ],
+      "S231P:hasInput": [
+        {
+          "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.Custom02.ymax"
+        },
+        {
+          "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.Custom02.ymax1"
+        }
+      ],
+      "S231P:hasOutput": [
+        {
+          "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.Custom02.y"
+        },
+        {
+          "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.Custom02.y1"
+        }
+      ],
+      "S231P:hasParameter": {
+        "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.Custom02.k"
+      },
+      "S231P:label": "Custom02"
+    },
+    {
+      "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.Custom02.gain",
+      "@type": "https://data.ashrae.org/S231P#Buildings.Controls.OBC.CDL.Reals.MultiplyByParameter",
+      "S231P:accessSpecifier": "public",
+      "S231P:graphics": "{\"Placement\":{\"transformation\":{\"extent\":[{\"x\":-8,\"y\":16},{\"x\":12,\"y\":36}]}}}",
+      "S231P:hasInstance": [
+        {
+          "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.Custom02.gain.k"
+        },
+        {
+          "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.Custom02.gain.u"
+        },
+        {
+          "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.Custom02.gain.y"
+        }
+      ],
+      "S231P:label": "gain"
+    },
+    {
+      "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.Custom02.gain.k",
+      "S231P:value": 1
+    },
+    {
+      "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.Custom02.gain.y",
+      "S231P:isConnectedTo": {
+        "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.Custom02.y"
+      }
+    },
+    {
+      "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.Custom02.gain1",
+      "@type": "https://data.ashrae.org/S231P#Buildings.Controls.OBC.CDL.Reals.MultiplyByParameter",
+      "S231P:accessSpecifier": "public",
+      "S231P:graphics": "{\"Placement\":{\"transformation\":{\"extent\":[{\"x\":-10,\"y\":-46},{\"x\":10,\"y\":-26}]}}}",
+      "S231P:hasInstance": [
+        {
+          "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.Custom02.gain1.k"
+        },
+        {
+          "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.Custom02.gain1.u"
+        },
+        {
+          "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.Custom02.gain1.y"
+        }
+      ],
+      "S231P:label": "gain1"
+    },
+    {
+      "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.Custom02.gain1.k",
+      "S231P:value": 1
+    },
+    {
+      "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.Custom02.gain1.y",
+      "S231P:isConnectedTo": {
+        "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.Custom02.y1"
+      }
+    },
+    {
+      "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.Custom02.k",
+      "@type": "S231P:Parameter",
+      "S231P:accessSpecifier": "public",
+      "S231P:description": "Constant gain",
+      "S231P:isOfDataType": {
+        "@id": "S231P:Real"
+      },
+      "S231P:label": "k",
+      "S231P:value": 2
+    },
+    {
+      "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.Custom02.y",
+      "@type": "S231P:RealOutput",
+      "S231P:accessSpecifier": "public",
+      "S231P:description": "Maximum value of output signal",
+      "S231P:graphics": "{\"Placement\":{\"transformation\":{\"extent\":[{\"x\":106,\"y\":-10},{\"x\":126,\"y\":10}]},\"iconTransformation\":{\"extent\":[{\"x\":100,\"y\":-10},{\"x\":120,\"y\":10}]}}}",
+      "S231P:label": "y"
+    },
+    {
+      "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.Custom02.y1",
+      "@type": "S231P:RealOutput",
+      "S231P:accessSpecifier": "public",
+      "S231P:description": "Maximum value of output signal",
+      "S231P:graphics": "{\"Placement\":{\"transformation\":{\"extent\":[{\"x\":104,\"y\":-72},{\"x\":124,\"y\":-52}]},\"iconTransformation\":{\"extent\":[{\"x\":100,\"y\":-10},{\"x\":120,\"y\":10}]}}}",
+      "S231P:label": "y1"
+    },
+    {
+      "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.Custom02.ymax",
+      "@type": "S231P:RealInput",
+      "S231P:accessSpecifier": "public",
+      "S231P:description": "Maximum value of output signal",
+      "S231P:graphics": "{\"Placement\":{\"transformation\":{\"extent\":[{\"x\":-134,\"y\":20},{\"x\":-94,\"y\":60}]}}}",
+      "S231P:isConnectedTo": {
+        "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.Custom02.gain.u"
+      },
+      "S231P:label": "ymax"
+    },
+    {
+      "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.Custom02.ymax1",
+      "@type": "S231P:RealInput",
+      "S231P:accessSpecifier": "public",
+      "S231P:description": "Maximum value of output signal",
+      "S231P:graphics": "{\"Placement\":{\"transformation\":{\"extent\":[{\"x\":-136,\"y\":-42},{\"x\":-96,\"y\":-2}]}}}",
+      "S231P:isConnectedTo": {
+        "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.Custom02.gain1.u"
+      },
+      "S231P:label": "ymax1"
+    }
+  ]
+}
