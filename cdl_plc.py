@@ -1151,5 +1151,5 @@ class Cdl2Plc:
 
 if __name__ == "__main__":  # pragma: no cover
 
-    cxf_json = '../modelica-json-1.2.0/modelica-json-1.2.0/cxf/ModelicaTestCases/SingleBlocks/Reals/Add.jsonld'
+    cxf_json = 'cxf/ModelicaTestCases/SingleBlocks/Reals/Add.jsonld'
     Cdl2Plc(cxf_json, debug=True).translate()

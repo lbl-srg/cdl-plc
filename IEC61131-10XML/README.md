@@ -1,0 +1,1 @@
+This folder contains the IEC 61131-10 XML files of the test cases created by the translator.

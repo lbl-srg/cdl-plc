@@ -1,0 +1,1 @@
+This folder contains Modelica models used as test cases for the translator

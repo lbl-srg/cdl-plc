@@ -1,0 +1,1 @@
+This folder contains CXF representations in `.jsonld` of the CDL test sequences
