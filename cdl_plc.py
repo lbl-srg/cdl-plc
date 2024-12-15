@@ -6,6 +6,14 @@ import shutil
 import ast
 
 
+import os
+
+abspath = os.path.abspath(__file__)
+dname = os.path.dirname(abspath)
+print(dname)
+os.chdir(dname)
+
+
 class Cdl2Plc:
 
     dict_assign_cdl_to_iec_standard_lib = {
@@ -1091,19 +1099,22 @@ class Cdl2Plc:
                         cdl_block = fileBlock.read()
                     self.dict_cdl_blocks["scalar_inputs"].add(cdl_block)
 
-    def create_iec_xml(self):
+    def create_iec_xml(self, debug=False):
         """
         Render based on dicts
         """
         template_loader = jinja2.FileSystemLoader(searchpath="./")
         template_env = jinja2.Environment(loader=template_loader)
 
-
         # fileTemplateVariable = "templateVariable.xml"
         file_template_global = [
             "xml_templates/structure/global.xml",
             "templateVariable.xml",
         ][0]
+
+        if debug:
+            print('cwd: ', os.getcwd())
+
         template = template_env.get_template(file_template_global)
         self.output_text = template.render(
             dictInputVars=self.program_inputs,

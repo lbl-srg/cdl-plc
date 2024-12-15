@@ -57,7 +57,7 @@
 							<expression>u2</expression>
 						</inVariable>
 						<block localId="1" typeName="ADD" executionOrderId="0" width="20" height="20">
-							<position x="672" y="60"/>
+							<position x="792" y="60"/>
 							<inputVariables>
 								<variable formalParameter="IN1">
 									<connectionPointIn>
@@ -82,7 +82,7 @@
 							</outputVariables>
 						</block>
 						<outVariable localId="4" executionOrderId="0" width="10" height="10" negated="false">
-							<position x="1152" y="40"/>
+							<position x="1440" y="40"/>
 							<connectionPointIn>
 								<relPosition x="0" y="22"/>
 								<connection refLocalId="1" formalParameter="OUT"/>

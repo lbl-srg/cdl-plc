@@ -66,7 +66,7 @@
 							<expression>r1</expression>
 						</inVariable>
 						<block localId="1" typeName="Reals_MultiplyByParameter" instanceName="gain" executionOrderId="0" width="20" height="20">
-							<position x="792" y="20"/>
+							<position x="804" y="20"/>
 							<inputVariables>
 								<variable formalParameter="u">
 									<connectionPointIn>

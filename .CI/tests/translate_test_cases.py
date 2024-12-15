@@ -2,7 +2,7 @@ import sys
 sys.path.append('../../')
 import cdl_plc
 
-cxf_json_path = '../../cxf/ModelicaTestCases/'
+cxf_json_path = 'cxf/ModelicaTestCases/'
 
 test_cases = [
     cxf_json_path + 'SingleBlocks/Reals/' + 'Add',
