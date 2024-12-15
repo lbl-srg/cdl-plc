@@ -1138,7 +1138,10 @@ class Cdl2Plc:
         if self.debug:
             print(xml_export)
 
-        directory = self.output_folder + 'IEC61131-10XML/{}'.format(self._program_name)
+        if self.output_folder is not None:
+            directory = self.output_folder + 'IEC61131-10XML/{}'.format(self._program_name)
+        else:
+            directory = 'IEC61131-10XML/{}'.format(self._program_name)
         if os.path.exists(directory):
             shutil.rmtree(directory)
         os.makedirs(directory)
