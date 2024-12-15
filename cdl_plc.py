@@ -6,6 +6,14 @@ import shutil
 import ast
 
 
+import os
+
+abspath = os.path.abspath(__file__)
+dname = os.path.dirname(abspath)
+print(dname)
+os.chdir(dname)
+
+
 class Cdl2Plc:
 
     dict_assign_cdl_to_iec_standard_lib = {
@@ -69,9 +77,11 @@ class Cdl2Plc:
     def __init__(
             self,
             cxf_file,
-            debug,
+            output_folder=None,
+            debug=False,
     ):
         self.cxf_file = cxf_file
+        self.output_folder = output_folder
 
         # properties
         self._multi_input_blocks = None
@@ -1091,19 +1101,22 @@ class Cdl2Plc:
                         cdl_block = fileBlock.read()
                     self.dict_cdl_blocks["scalar_inputs"].add(cdl_block)
 
-    def create_iec_xml(self):
+    def create_iec_xml(self, debug=False):
         """
         Render based on dicts
         """
         template_loader = jinja2.FileSystemLoader(searchpath="./")
         template_env = jinja2.Environment(loader=template_loader)
 
-
         # fileTemplateVariable = "templateVariable.xml"
         file_template_global = [
-            "xml_templates/structure/global.xml",
+            "xml_templates/structure/Global.xml",
             "templateVariable.xml",
         ][0]
+
+        if debug:
+            print('cwd: ', os.getcwd())
+
         template = template_env.get_template(file_template_global)
         self.output_text = template.render(
             dictInputVars=self.program_inputs,
@@ -1125,13 +1138,21 @@ class Cdl2Plc:
         if self.debug:
             print(xml_export)
 
-        directory = 'IEC61131-10XML/{}'.format(self._program_name)
+        if self.output_folder is not None:
+            directory = self.output_folder + 'IEC61131-10XML/{}'.format(self._program_name)
+        else:
+            directory = 'IEC61131-10XML/{}'.format(self._program_name)
         if os.path.exists(directory):
             shutil.rmtree(directory)
         os.makedirs(directory)
 
         # Writing to sample.json
-        with open("{}/plc.xml".format(directory), "w") as outfile:
+        with open(
+                "{}/plc.xml".format(directory),
+                "w",
+                encoding="utf-8",
+                newline="\n",
+        ) as outfile:
             outfile.write(xml_export)
 
     def translate(self):
