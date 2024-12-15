@@ -1108,7 +1108,7 @@ class Cdl2Plc:
 
         # fileTemplateVariable = "templateVariable.xml"
         file_template_global = [
-            "xml_templates/structure/global.xml",
+            "xml_templates/structure/Global.xml",
             "templateVariable.xml",
         ][0]
 
