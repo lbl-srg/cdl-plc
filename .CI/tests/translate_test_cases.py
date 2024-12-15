@@ -16,4 +16,8 @@ test_cases = [
 
 for test_case in test_cases:
     cxf_json = test_case + ".jsonld"
-    cdl_plc.Cdl2Plc(cxf_json, debug=True).translate()
+    cdl_plc.Cdl2Plc(
+        cxf_json,
+        output_folder='check_translation_to_IEC_XML/',
+        debug=True,
+    ).translate()

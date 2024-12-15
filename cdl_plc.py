@@ -77,9 +77,11 @@ class Cdl2Plc:
     def __init__(
             self,
             cxf_file,
-            debug,
+            output_folder=None,
+            debug=False,
     ):
         self.cxf_file = cxf_file
+        self.output_folder = output_folder
 
         # properties
         self._multi_input_blocks = None
@@ -1136,7 +1138,7 @@ class Cdl2Plc:
         if self.debug:
             print(xml_export)
 
-        directory = 'IEC61131-10XML/{}'.format(self._program_name)
+        directory = self.output_folder + 'IEC61131-10XML/{}'.format(self._program_name)
         if os.path.exists(directory):
             shutil.rmtree(directory)
         os.makedirs(directory)
