@@ -21,7 +21,7 @@
       "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.MultiplyByParameter.gain",
       "@type": "https://data.ashrae.org/S231P#Buildings.Controls.OBC.CDL.Reals.MultiplyByParameter",
       "S231P:accessSpecifier": "public",
-      "S231P:graphics": "{\"Placement\":{\"transformation\":{\"extent\":[{\"x\":-8,\"y\":-10},{\"x\":12,\"y\":10}]}}}",
+      "S231P:graphics": "{\"Placement\":{\"transformation\":{\"extent\":[{\"x\":-6,\"y\":-10},{\"x\":14,\"y\":10}]}}}",
       "S231P:hasInstance": [
         {
           "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.MultiplyByParameter.gain.k"

@@ -4,75 +4,75 @@
   },
   "@graph": [
     {
-      "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.CustomPWithLimiter",
+      "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.customPWithLimiter",
       "@type": "S231P:Block",
       "S231P:containsBlock": [
         {
-          "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.CustomPWithLimiter.gain"
+          "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.customPWithLimiter.gain"
         },
         {
-          "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.CustomPWithLimiter.minValue"
+          "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.customPWithLimiter.minValue"
         }
       ],
       "S231P:hasInput": [
         {
-          "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.CustomPWithLimiter.e"
+          "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.customPWithLimiter.e"
         },
         {
-          "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.CustomPWithLimiter.yMax"
+          "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.customPWithLimiter.yMax"
         }
       ],
       "S231P:hasOutput": {
-        "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.CustomPWithLimiter.y"
+        "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.customPWithLimiter.y"
       },
       "S231P:hasParameter": {
-        "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.CustomPWithLimiter.k"
+        "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.customPWithLimiter.k"
       },
       "S231P:label": "CustomPWithLimiter"
     },
     {
-      "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.CustomPWithLimiter.e",
+      "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.customPWithLimiter.e",
       "@type": "S231P:RealInput",
       "S231P:accessSpecifier": "public",
       "S231P:description": "Control error",
       "S231P:graphics": "{\"Placement\":{\"transformation\":{\"extent\":[{\"x\":-140,\"y\":-60},{\"x\":-100,\"y\":-20}]}}}",
       "S231P:isConnectedTo": {
-        "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.CustomPWithLimiter.gain.u"
+        "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.customPWithLimiter.gain.u"
       },
       "S231P:label": "e"
     },
     {
-      "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.CustomPWithLimiter.gain",
+      "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.customPWithLimiter.gain",
       "@type": "https://data.ashrae.org/S231P#Buildings.Controls.OBC.CDL.Reals.MultiplyByParameter",
       "S231P:accessSpecifier": "public",
       "S231P:description": "Constant gain",
       "S231P:graphics": "{\"Placement\":{\"transformation\":{\"extent\":[{\"x\":-60,\"y\":-50},{\"x\":-40,\"y\":-30}]}}}",
       "S231P:hasInstance": [
         {
-          "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.CustomPWithLimiter.gain.k"
+          "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.customPWithLimiter.gain.k"
         },
         {
-          "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.CustomPWithLimiter.gain.u"
+          "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.customPWithLimiter.gain.u"
         },
         {
-          "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.CustomPWithLimiter.gain.y"
+          "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.customPWithLimiter.gain.y"
         }
       ],
       "S231P:label": "gain"
     },
     {
-      "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.CustomPWithLimiter.gain.k",
+      "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.customPWithLimiter.gain.k",
       "S231P:isFinal": true,
       "S231P:value": "k"
     },
     {
-      "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.CustomPWithLimiter.gain.y",
+      "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.customPWithLimiter.gain.y",
       "S231P:isConnectedTo": {
-        "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.CustomPWithLimiter.minValue.u2"
+        "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.customPWithLimiter.minValue.u2"
       }
     },
     {
-      "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.CustomPWithLimiter.k",
+      "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.customPWithLimiter.k",
       "@type": "S231P:Parameter",
       "S231P:accessSpecifier": "public",
       "S231P:description": "Constant gain",
@@ -83,32 +83,32 @@
       "S231P:value": 2
     },
     {
-      "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.CustomPWithLimiter.minValue",
+      "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.customPWithLimiter.minValue",
       "@type": "https://data.ashrae.org/S231P#Buildings.Controls.OBC.CDL.Reals.Min",
       "S231P:accessSpecifier": "public",
       "S231P:description": "Outputs the minimum of its inputs",
       "S231P:graphics": "{\"Placement\":{\"transformation\":{\"extent\":[{\"x\":20,\"y\":-10},{\"x\":40,\"y\":10}]}}}",
       "S231P:hasInstance": [
         {
-          "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.CustomPWithLimiter.minValue.u1"
+          "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.customPWithLimiter.minValue.u1"
         },
         {
-          "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.CustomPWithLimiter.minValue.u2"
+          "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.customPWithLimiter.minValue.u2"
         },
         {
-          "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.CustomPWithLimiter.minValue.y"
+          "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.customPWithLimiter.minValue.y"
         }
       ],
       "S231P:label": "minValue"
     },
     {
-      "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.CustomPWithLimiter.minValue.y",
+      "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.customPWithLimiter.minValue.y",
       "S231P:isConnectedTo": {
-        "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.CustomPWithLimiter.y"
+        "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.customPWithLimiter.y"
       }
     },
     {
-      "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.CustomPWithLimiter.y",
+      "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.customPWithLimiter.y",
       "@type": "S231P:RealOutput",
       "S231P:accessSpecifier": "public",
       "S231P:description": "Control signal",
@@ -116,13 +116,13 @@
       "S231P:label": "y"
     },
     {
-      "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.CustomPWithLimiter.yMax",
+      "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.customPWithLimiter.yMax",
       "@type": "S231P:RealInput",
       "S231P:accessSpecifier": "public",
       "S231P:description": "Maximum value of output signal",
       "S231P:graphics": "{\"Placement\":{\"transformation\":{\"extent\":[{\"x\":-140,\"y\":20},{\"x\":-100,\"y\":60}]}}}",
       "S231P:isConnectedTo": {
-        "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.CustomPWithLimiter.minValue.u1"
+        "@id": "http://example.org#ModelicaTestCases.CompositeBlocks.customPWithLimiter.minValue.u1"
       },
       "S231P:label": "yMax"
     }
