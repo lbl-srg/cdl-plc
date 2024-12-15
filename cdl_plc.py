@@ -1147,7 +1147,12 @@ class Cdl2Plc:
         os.makedirs(directory)
 
         # Writing to sample.json
-        with open("{}/plc.xml".format(directory), "w", encoding="utf-8") as outfile:
+        with open(
+                "{}/plc.xml".format(directory),
+                "w",
+                encoding="utf-8",
+                newline="\n",
+        ) as outfile:
             outfile.write(xml_export)
 
     def translate(self):
