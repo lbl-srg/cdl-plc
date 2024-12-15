@@ -1,3 +1,5 @@
+import sys
+sys.path.append('../../')
 import cdl_plc
 
 cxf_json_path = '../../cxf/ModelicaTestCases/'
