@@ -6,7 +6,7 @@ test_cases = [
     cxf_json_path + 'SingleBlocks/Reals/' + 'Add',
     cxf_json_path + 'SingleBlocks/Reals/' + 'MultiplyByParameter',
 
-    cxf_json_path + 'CompositeBlocks/' + "customPWithLimiter",
+    cxf_json_path + 'CompositeBlocks/' + "CustomPWithLimiter",
     cxf_json_path + 'CompositeBlocks/' + "Custom01",
     cxf_json_path + 'CompositeBlocks/' + "Custom02",
     cxf_json_path + 'CompositeBlocks/' + "Custom03",
