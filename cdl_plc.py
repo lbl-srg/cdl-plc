@@ -4,6 +4,7 @@ import xml.dom.minidom
 import os
 import shutil
 import ast
+import numbers
 
 
 import os
@@ -12,6 +13,60 @@ abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath)
 print(dname)
 os.chdir(dname)
+
+
+def evaluate_safe_expression(expr):
+
+    print('evaluating:', expr)
+    print('type:', type(expr))
+
+    try:
+        # If expr is already a number, return it directly
+        if isinstance(expr, (int, float)):
+            print('Input is int or float. Already a valid number.')
+            return expr
+
+        # Ensure expr is a string before parsing
+        if not isinstance(expr, str):
+            print('Input is not a string. Invalid input.')
+            return None
+
+        # Parse the expression
+        node = ast.parse(expr, mode='eval')
+
+        # Special case expression is just a single number
+        if isinstance(node.body, ast.Constant):
+            print('input is just a single number as string')
+            return eval(expr)
+
+        # Allow only safe node types
+        allowed_types = (
+            ast.Expression,
+            ast.BinOp,
+            ast.UnaryOp,
+            ast.Constant,
+            ast.Add,
+            ast.Sub,
+            ast.Mult,
+            ast.Div,
+            ast.Mod,
+            ast.Pow,
+            ast.FloorDiv,
+            ast.USub,  # Allows negative numbers
+        )
+
+        if all(isinstance(n, allowed_types) for n in ast.walk(node)):
+            print('Safe to evaluate. Evaluate string.')
+            result = eval(expr)
+            print('result', result)
+            return result
+        else:
+            print('Unsafe operation detected.')
+            return None
+
+    except (SyntaxError, ValueError, TypeError, NameError):
+        print('Error. Invalid expression.')
+        return None
 
 
 class Cdl2Plc:
@@ -49,6 +104,35 @@ class Cdl2Plc:
                 'y': 'OUT',
             },
         },
+        "Reals_Multiply": {
+            'name_iec': "MUL",
+            'mapping_ios': {
+                'u1': 'IN1',
+                'u2': 'IN2',
+                'y': 'OUT',
+            },
+        },
+        "Logical_Not": {
+            'name_iec': "NOT",
+            'mapping_ios': {
+                'u': 'IN',
+                'y': 'OUT',
+            },
+        },
+        "Conversions_BooleanToInteger": {
+            'name_iec': "BOOL_TO_INT",
+            'mapping_ios': {
+                'u': 'IN',
+                'y': 'OUT',
+            },
+        },
+        "Conversions_BooleanToReal": {
+            'name_iec': "BOOL_TO_REAL",
+            'mapping_ios': {
+                'u': 'IN',
+                'y': 'OUT',
+            },
+        },
     }
 
     dict_CDL_to_OSCAT = {
@@ -59,10 +143,15 @@ class Cdl2Plc:
         "Reals_Add": ["Reals_Add"],
         "Reals_Min": ["Reals_Min"],
         "Reals_MultiplyByParameter": ["Reals_MultiplyByParameter"],
+        "Reals_Hysteresis": ["Reals_Hysteresis"],
+        "Reals_PID": ["Reals_PID"],
+        "Reals_Sources_Constant": ["Reals_Sources_Constant"],
+        "Reals_Line": ["Reals_Line"],
+        "Reals_MovingAverage": ["Reals_MovingAverage"],
     }
 
     available_node_types = {
-        "parameter_assignment": 1,
+        "parameter_assignment": 1,  # can be a parameter assignment within a CDL block
         "parameter_definition": 2,
         "connection": 3,
         "fb_instance": 4,
@@ -72,6 +161,9 @@ class Cdl2Plc:
         "input_real": 8,
         "input_bool": 9,
         "program": 10,
+        "input_int": 11,
+        "output_int": 12,
+        "user_defined_composite_block": 13,
     }
 
     def __init__(
@@ -104,7 +196,8 @@ class Cdl2Plc:
         self.program_outputs = None
         self.program_fb_instances = None
         self.program_fb_instances_iec = None
-        self.dict_cdl_blocks = None
+        self.program_user_defined_composite_blocks = None
+        self.dict_xml_snippets_of_cdl_block_classes = None
 
         self.output_text = None
         self._program_name = None
@@ -123,7 +216,11 @@ class Cdl2Plc:
         return stripped_node_id_string
 
     @staticmethod
-    def strip_fb_name_from_type(node, debug=True):
+    def get_class_name_from_user_defined_composite_block(node, debug=True):
+        return node["@type"].split("#")[1].split('.')[-1]
+
+    @staticmethod
+    def get_class_name_from_cdl_block(node, debug=True):
         stripped = '_'.join(node["@type"].split("#")[-1].split(".")[4:])
         if debug:
             print('stripped: ', stripped)
@@ -135,11 +232,20 @@ class Cdl2Plc:
             self.create_xml_local_ids()
         return self._xml_local_ids
 
-    def get_block_class_name(self, instance_name):
+    def get_cdl_block_class_name(self, instance_name, debug=True):
+
+        # get names of CDL block instances and name of associated CDL block classes
         cxf_instances = self.cxf_instances
-        print('cxf_instances', cxf_instances)
-        test = cxf_instances[instance_name]
-        output = test.replace(".", "_")
+
+        if debug:
+            print('cxf_instances', cxf_instances)
+
+        # get the name of the CDL block class
+        cdl_block_class_name = cxf_instances[instance_name]
+
+        # replace
+        output = cdl_block_class_name.replace(".", "_")
+
         return output
 
     def create_xml_local_ids(self, debug=True):
@@ -153,7 +259,8 @@ class Cdl2Plc:
         # loop over JSON-LD
         for i, node in enumerate(self.cxf_graph):
             if debug:
-                print("i-iterator and node:", i, node)
+                print("i-iterator:", i)
+                print("node:", node)
             node_type = self.check_node_type(node, debug=debug)
             if debug:
                 print("node_type:", node_type)
@@ -162,8 +269,11 @@ class Cdl2Plc:
                 self.available_node_types["fb_instance_iec"],
                 self.available_node_types["input_real"],
                 self.available_node_types["input_bool"],
+                self.available_node_types["input_int"],
                 self.available_node_types["output_real"],
                 self.available_node_types["output_bool"],
+                self.available_node_types["output_int"],
+                self.available_node_types["user_defined_composite_block"],
             ]:
                 node_label = node["S231P:label"]
                 self._xml_local_ids[node_label] = local_id
@@ -175,7 +285,7 @@ class Cdl2Plc:
         # parameters can not be taken from the JSON-LD directly
         list_parameters = [
             self.check_parameter_string(x['S231P:value']) for x in
-            self.group_node_types([self.available_node_types["parameter_assignment"]])
+            self.select_nodes_by_types([self.available_node_types["parameter_assignment"]])
         ]
         if self.debug:
             print("list_parameters", list_parameters)
@@ -240,8 +350,10 @@ class Cdl2Plc:
         str: A parameter string constructed based on the input value.
         """
 
-        if isinstance(value, int):
-            par_str = "r{}".format(value)
+        value_type = evaluate_safe_expression(value)
+
+        if isinstance(value_type, numbers.Number):
+            par_str = "_{}".format(str(value_type).replace('.', '_'))
         else:
             par_str = value
         return par_str
@@ -315,35 +427,53 @@ class Cdl2Plc:
             ]
         return output
 
-    def create_xml_parameters(self, debug=True):
+    def collect_xml_parameters(self, debug=True):
         """
         creates a dict with local parameters
         """
         self.program_parameters = {}
+
+        # loop over nodes
         for node in self.cxf_graph:
+
+            # check node type
             node_type = self.check_node_type(node)
+
+            # if node is 'parameter_assignment'
             if node_type == 1:
                 if debug:
                     print("node with parameter:", node)
 
-                def extract_parameter_value(node):
-                    # extract parameter value
-                    node_value_local = node['S231P:value']
+                def extract_parameter_value(input_node):
+                    node_value_local = input_node['S231P:value']
                     if debug:
                         print("node_value", node_value_local)
+                        print("node_value type", type(node_value_local))
 
-                    if isinstance(node_value_local, int):
+                    type_node_value_local = evaluate_safe_expression(node_value_local)
+                    print('type_node_value_local', type_node_value_local)
+
+                    # case: parameter is numeric
+                    if isinstance(type_node_value_local, numbers.Number):
                         if debug:
-                            print('The parameter is an integer')
-                        parameter_value_local = node_value_local
-                        parValueType = "REAL"
+                            print('The parameter is numeric')
+                        parameter_value_local = type_node_value_local
+
+                        if isinstance(type_node_value_local, float):
+                            par_value_type = "REAL"
+                        elif isinstance(type_node_value_local, int) and not isinstance(type_node_value_local, bool):
+                            parameter_value_local = "{:.1f}".format(parameter_value_local)
+                            par_value_type = "REAL"
+                        elif isinstance(type_node_value_local, bool):
+                            par_value_type = "BOOL"
+
+                    # case: parameter is a variable
                     else:
                         if debug:
                             print('The parameter is a variable / input')
 
                         # find the corresponding value
-
-                        nodes_with_parameter_definitions = self.group_node_types(
+                        nodes_with_parameter_definitions = self.select_nodes_by_types(
                                 [2],
                         )
                         if debug:
@@ -353,14 +483,16 @@ class Cdl2Plc:
                                 print('nodeParDef:', nodeParDef)
                             if nodeParDef["S231P:label"] == node_value_local:
                                 parameter_value_local = nodeParDef["S231P:value"]
-                    parameter_value_local = "{:.1f}".format(parameter_value_local)
-                    if self.debug:
-                        print("parameter_value", parameter_value_local)
-                    return node_value_local, parameter_value_local
 
-                node_value, parameter_value = extract_parameter_value(
-                    node,
-                )
+                    if self.debug:
+                        print('node_value_local: ', node_value_local)
+                        print('parameter_value_local: ', parameter_value_local)
+                        print('par_value_type: ', par_value_type)
+
+                    return node_value_local, parameter_value_local, par_value_type
+
+                # extract parameter value
+                node_value, parameter_value, parameter_value_type = extract_parameter_value(node)
 
                 instance = self.parse_id_key(node)["instance"]
                 link = self.parse_id_key(node)["link"]
@@ -368,20 +500,21 @@ class Cdl2Plc:
                     print("instance", instance)
                     print("link", link)
 
-                def get_local_id():
-                    par_str = self.check_parameter_string(node_value)
-                    local_id = self.xml_local_ids[par_str]
-                    return par_str, local_id
-
-                par_str, local_id = get_local_id()
+                # def get_local_id(node_value):
+                parameter_string = self.check_parameter_string(node_value)
+                local_id = self.xml_local_ids[parameter_string]
+                #     return parameter_string, local_id
+                #
+                # parameter_string, local_id = get_local_id()
 
                 if self.debug:
-                    print(par_str)
-                self.program_parameters[par_str] = {
+                    print('parameter_string', parameter_string)
+
+                self.program_parameters[parameter_string] = {
                     "instance": instance,
                     "link": link,
                     "value": parameter_value,
-                    "valueType": "REAL",
+                    "valueType": parameter_value_type,
                     "localId": local_id,
                 }
 
@@ -411,7 +544,7 @@ class Cdl2Plc:
             - list: A list of detected outputs.
         """
 
-        dict_input = self.group_node_types([self.available_node_types["program"]])[0]
+        dict_input = self.select_nodes_by_types([self.available_node_types["program"]])[0]
 
         self._cxf_connection_structure = {}
 
@@ -490,7 +623,7 @@ class Cdl2Plc:
             print("y_shift: ", self._y_shift)
             print("y_diff: ", y_diff)
 
-    def group_node_types(
+    def select_nodes_by_types(
             self,
             node_types=[],
             debug=True,
@@ -509,19 +642,29 @@ class Cdl2Plc:
         list: A list containing nodes from the graph that match the specified types.
         """
 
-        print('group node types')
+        print('selecting the following node types: ', node_types)
 
         if node_types is []:
             node_types = self.available_node_types
+
+        # instantiate empty list
         list_return = []
+
+        # iterate over JSONLD graph
         for node in self.cxf_graph:
+
             if debug:
                 print("node", node)
+
+            # check node type
             node_type = self.check_node_type(node)
+
             if self.debug:
                 print("node_type", node_type)
+
             if node_type in node_types:
                 list_return.append(node)
+
         return list_return
 
     def check_node_type(self, node, debug=False):
@@ -538,19 +681,18 @@ class Cdl2Plc:
 
         node_type = None
 
+        # this is a parameter of a block
         if set(keys).issubset({"@id", "S231P:isFinal", "S231P:value"}):
-            # this is a parameter of a block
 
             # get instance name
             instance_name = node["@id"].split("#")[-1].split(".")[-2]
+
+            # get corresponding class name
+            class_name = self.get_cdl_block_class_name(instance_name)
+
             if debug:
                 print('instance_name:', instance_name)
-            # get class name
-            class_name = self.get_block_class_name(instance_name)
-
-            # if self.debug:
-            #     print("instance_name", instance_name)
-            #     print("class_name", class_name)
+                print('class_name:', class_name)
 
             if class_name in self.multi_input_blocks:
                 node_type = self.available_node_types["nin_fb_instance"]
@@ -569,31 +711,42 @@ class Cdl2Plc:
             node_type = self.available_node_types["parameter_definition"]
 
         elif keys == ["@id", "S231P:isConnectedTo"]:
+
             check_is_connected_to_keys = node["S231P:isConnectedTo"]
+
             id_key_only = None
+
+            # if output connected to multiple inputs (?)
             if isinstance(check_is_connected_to_keys, list):
                 # check if "@id" is the only key
                 # set_check = set()
                 if all([list(x.keys()) == ["@id"] for x in check_is_connected_to_keys]):
                     id_key_only = True
 
+            # if output connected to one input (?)
             elif isinstance(check_is_connected_to_keys, dict):
                 if list(node["S231P:isConnectedTo"].keys())[0] == "@id":
                     id_key_only = True
             if id_key_only:
                 node_type = self.available_node_types["connection"]
 
-        elif node["@type"] == "S231P:RealOutput":
+        elif ("@type" in keys) and (node["@type"] == "S231P:RealOutput"):
             node_type = self.available_node_types["output_real"]
 
-        elif node["@type"] == "S231P:BooleanOutput":
+        elif ("@type" in keys) and (node["@type"] == "S231P:BooleanOutput"):
             node_type = self.available_node_types["output_bool"]
 
-        elif node["@type"] == "S231P:RealInput":
+        elif ("@type" in keys) and (node["@type"] == "S231P:IntegerOutput"):
+            node_type = self.available_node_types["output_int"]
+
+        elif ("@type" in keys) and (node["@type"] == "S231P:RealInput"):
             node_type = self.available_node_types["input_real"]
 
-        elif node["@type"] == "S231P:BooleanInput":
+        elif ("@type" in keys) and (node["@type"] == "S231P:BooleanInput"):
             node_type = self.available_node_types["input_bool"]
+
+        elif ("@type" in keys) and (node["@type"] == "S231P:IntegerInput"):
+            node_type = self.available_node_types["input_int"]
 
         elif set(keys).issubset({
             "@id",
@@ -606,7 +759,7 @@ class Cdl2Plc:
         }) and (
                 node["@type"].split("#")[0] == "https://data.ashrae.org/S231P"):
 
-            fb_name = self.strip_fb_name_from_type(node)
+            fb_name = self.get_class_name_from_cdl_block(node)
             if debug:
                 print("fb_name", fb_name)
             if fb_name in self.dict_assign_cdl_to_iec_standard_lib:
@@ -618,7 +771,7 @@ class Cdl2Plc:
             node_type = self.available_node_types["program"]
 
         else:
-            node_type = None
+            node_type = self.available_node_types["user_defined_composite_block"]
 
         return node_type
 
@@ -676,34 +829,46 @@ class Cdl2Plc:
         if self._cxf_graph is None:
             self.cxf_graph()
         if self._cxf_instances is None:
-            self.get_cxf_block_instances(debug=debug)
+            self.map_function_block_instances_to_classes(debug=debug)
         return self._cxf_instances
 
-    def get_cxf_block_instances(self, debug=False):
+    def map_function_block_instances_to_classes(self, debug=False):
         """
         Check function block classes
         """
 
+        # empty dict
         self._cxf_instances = {}
+
+        # loop over nodes in graph
         for node in self.cxf_graph:
             if "@type" in node.keys():
                 node_type = node["@type"].split("#")
-                print('node_type after split', node_type)
+
+                if self.debug:
+                    print('node_type after split', node_type)
+
+                # case: node is a CDL block
                 if node_type[0] == "https://data.ashrae.org/S231P":
-                    self.cxf_instances[node["S231P:label"]] = self.strip_fb_name_from_type(node)
+                    self.cxf_instances[node["S231P:label"]] = self.get_class_name_from_cdl_block(node)
+
+                # case: node is not a CDL block
+                elif node_type[0] == 'http://example.org':
+                    self.cxf_instances[node["S231P:label"]] = self.get_class_name_from_user_defined_composite_block(node)
+
         if debug:
             print('cxf_instances', self.cxf_instances)
 
-    def check_nodes(self):
-        """
-        Check nodes
-        """
-
-        if self.debug:
-            for node in self._cxf_json["@graph"]:
-                print(node)
-                print(self.check_node_type(node), "\n")
-            # print(json.dumps(cxf_dict, indent = 4, sort_keys=False))
+    # def check_nodes(self):
+    #     """
+    #     Check nodes
+    #     """
+    #
+    #     if self.debug:
+    #         for node in self._cxf_json["@graph"]:
+    #             print(node)
+    #             print(self.check_node_type(node), "\n")
+    #         # print(json.dumps(cxf_dict, indent = 4, sort_keys=False))
 
     def get_connection_params(
             self,
@@ -731,8 +896,9 @@ class Cdl2Plc:
             block_name = split[0]
             len_split = len(split)
             if self.debug:
-                print("\nsplit", split)
-                print("len_split", len_split)
+                print("split: ", split)
+                print("block_name: ", block_name)
+                print("len_split: ", len_split)
 
             if self.debug:
                 print("xml_local_ids", self.xml_local_ids)
@@ -755,8 +921,13 @@ class Cdl2Plc:
                 if self.debug:
                     print("len_split >= 2")
                 link = split[1].replace("%", "")
-                class_name = self.get_block_class_name(block_name)
-                print(1, class_name)
+
+                # get CDL block class name
+                class_name = self.get_cdl_block_class_name(block_name)
+
+                if self.debug:
+                    print('class_name: ', class_name)
+
                 # replace CDL IOs with IEC IOs if necessary
                 if class_name in self.dict_assign_cdl_to_iec_standard_lib:
                     link = self.dict_assign_cdl_to_iec_standard_lib[class_name]['mapping_ios'][link]
@@ -792,10 +963,10 @@ class Cdl2Plc:
         Text
         """
 
-        print("\ncreating dict with connections")
+        print("creating dict with connections")
 
         # get only those nodes which are connections or inputs
-        connection_and_input_nodes = self.group_node_types([
+        connection_and_input_nodes = self.select_nodes_by_types([
             self.available_node_types["connection"],
             self.available_node_types["input_real"],
             self.available_node_types["input_bool"],
@@ -814,7 +985,7 @@ class Cdl2Plc:
             node_type = self.check_node_type(node)
 
             if self.debug:
-                print("\nnode", node)
+                print("node", node)
                 print("node_type", node_type)
                 print("Status _dict_connections", self._dict_connections)
 
@@ -875,7 +1046,7 @@ class Cdl2Plc:
 
         # step 2: add connections from parameter inputs
         # loop over all parameter assignments
-        for node in self.group_node_types(
+        for node in self.select_nodes_by_types(
                 [self.available_node_types["parameter_assignment"]],
         ):
             if self.debug:
@@ -904,7 +1075,7 @@ class Cdl2Plc:
         get program name
         """
 
-        self._program_name = self.group_node_types(
+        self._program_name = self.select_nodes_by_types(
             [self.available_node_types["program"]],
         )[0]["@id"].split("#")[-1].split(".")[-1]
 
@@ -919,30 +1090,47 @@ class Cdl2Plc:
 
     def create_dicts_for_jinja(self):
         """
-        Inputs, outputs, function block instances
+        Creates dictionaries for example with inputs, outputs, function block instances as input for jinja
         """
 
+        # dict with program inputs
         self.program_inputs = {}
+
+        # dict with program outputs
         self.program_outputs = {}
+
+        # dict with CDL function block instances
         self.program_fb_instances = {}
+
+        # dict with IEC function block instances
         self.program_fb_instances_iec = {}
 
-        dict_select = self.group_node_types(
+        # dict with user-defined composite function block instances
+        self.program_user_defined_composite_blocks = {}
+
+        # select node types
+        dict_select = self.select_nodes_by_types(
             [
                 self.available_node_types["input_real"],
                 self.available_node_types["input_bool"],
+                self.available_node_types["input_int"],
                 self.available_node_types["output_real"],
                 self.available_node_types["output_bool"],
+                self.available_node_types["output_int"],
                 self.available_node_types["fb_instance"],
                 self.available_node_types["fb_instance_iec"],
+                self.available_node_types["user_defined_composite_block"],
             ]
         )
 
+        # loop over selected node types
+        # identify the node types
+        # assign the information to the dicts above
         for i, node in enumerate(dict_select):
             type_node = self.check_node_type(node)
             type_name = self.strip_node_id_string(node)[-1]
             if self.debug:
-                print("\nnode:", node)
+                print("node:", node)
                 print("type:", type_node)
                 print("name:", type_name)
 
@@ -967,6 +1155,19 @@ class Cdl2Plc:
                 # write entry
                 self.program_inputs[type_name] = {
                     "type": "BOOL",
+                    "localId": local_id,
+                    # "connectedTo": connectedTo,
+                    "x": x,
+                    "y": -y,
+                    "width": width,
+                    "height": height,
+                }
+
+            if type_node == self.available_node_types["input_int"]:
+
+                # write entry
+                self.program_inputs[type_name] = {
+                    "type": "INT",
                     "localId": local_id,
                     # "connectedTo": connectedTo,
                     "x": x,
@@ -1005,16 +1206,31 @@ class Cdl2Plc:
                     "inputFrom": dict_inputs,
                 }
 
+            elif type_node == self.available_node_types["output_int"]:
+
+                dict_inputs = self.dict_connections[type_name]["input"]
+
+                # write entry
+                self.program_outputs[type_name] = {
+                    "type": "INT",
+                    "localId": local_id,
+                    "x": x,
+                    "y": -y,
+                    "width": width,
+                    "height": height,
+                    "inputFrom": dict_inputs,
+                }
+
             elif type_node == self.available_node_types["fb_instance"]:
-                instance_type = self.strip_fb_name_from_type(node)
+                class_name = self.get_class_name_from_cdl_block(node)
 
                 dict_inputs = self.dict_connections[type_name]["input"]
                 dict_outputs = self.dict_connections[type_name]["output"]
 
                 # write entry
                 self.program_fb_instances[type_name] = {
-                    "instanceType": instance_type,
-                    "type": "derived name='{}'".format(instance_type),
+                    "instanceType": class_name,
+                    "type": "derived name='{}'".format(class_name),
                     "localId": local_id,
                     "x": x,
                     "y": -y,
@@ -1025,14 +1241,14 @@ class Cdl2Plc:
                 }
 
             elif type_node == self.available_node_types["fb_instance_iec"]:
-                instance_type = self.dict_assign_cdl_to_iec_standard_lib[self.strip_fb_name_from_type(node)]['name_iec']
+                class_name = self.dict_assign_cdl_to_iec_standard_lib[self.get_class_name_from_cdl_block(node)]['name_iec']
 
                 dict_inputs = self.dict_connections[type_name]["input"]
                 dict_outputs = self.dict_connections[type_name]["output"]
 
                 # write entry
                 self.program_fb_instances_iec[type_name] = {
-                    "instanceType": instance_type,
+                    "instanceType": class_name,
                     # "type": "derived name='{}'".format(instance_type),
                     "localId": local_id,
                     "x": x,
@@ -1043,10 +1259,30 @@ class Cdl2Plc:
                     "outputs": dict_outputs  # dictConnections[typeName]["output"],
                 }
 
+            elif type_node == self.available_node_types["user_defined_composite_block"]:
+                class_name = self.get_class_name_from_user_defined_composite_block(node)
+                print(123, class_name)
+
+                dict_inputs = self.dict_connections[type_name]["input"]
+                dict_outputs = self.dict_connections[type_name]["output"]
+
+                # write entry
+                self.program_user_defined_composite_blocks[type_name] = {
+                    "instanceType": class_name,
+                    "type": "derived name='{}'".format(class_name),
+                    "localId": local_id,
+                    "x": x,
+                    "y": -y,
+                    "width": width,
+                    "height": height,
+                    "inputs": dict_inputs,
+                    "outputs": dict_outputs  # dictConnections[typeName]["output"],
+                }
+
         if self.debug:
-            print("\ndict_input_vars: ", self.program_inputs)
-            print("\ndict_output_vars: ", self.program_outputs)
-            print("\ndict_fb_instances: ", self.program_fb_instances)
+            print("dict_input_vars: ", self.program_inputs)
+            print("dict_output_vars: ", self.program_outputs)
+            print("dict_fb_instances: ", self.program_fb_instances)
 
     def render_multi_in_blocks(self, name_block_class, inputs):
         template_loader = jinja2.FileSystemLoader(searchpath="./")
@@ -1072,11 +1308,11 @@ class Cdl2Plc:
 
     def create_dict_cdl_blocks(self):
         """
-        creates a dict with sets for the scalar inputs and the array inputs
+        creates a dict with python sets for the scalar inputs and the array inputs
         the sets contain the IEC XML snippets
         """
 
-        self.dict_cdl_blocks = {
+        self.dict_xml_snippets_of_cdl_block_classes = {
             "scalar_inputs": set(),
             "array_inputs": set(),
         }
@@ -1099,12 +1335,13 @@ class Cdl2Plc:
                 for file in files_to_load:
                     with open("xml_templates/function_blocks/{}.xml".format(file), "r") as fileBlock:
                         cdl_block = fileBlock.read()
-                    self.dict_cdl_blocks["scalar_inputs"].add(cdl_block)
+                    self.dict_xml_snippets_of_cdl_block_classes["scalar_inputs"].add(cdl_block)
 
     def create_iec_xml(self, debug=False):
         """
-        Render based on dicts
+        Render template based on dicts with inputs, outputs, blocks etc.
         """
+
         template_loader = jinja2.FileSystemLoader(searchpath="./")
         template_env = jinja2.Environment(loader=template_loader)
 
@@ -1117,7 +1354,11 @@ class Cdl2Plc:
         if debug:
             print('cwd: ', os.getcwd())
 
+        # load template
         template = template_env.get_template(file_template_global)
+
+        # render template
+        # create output text
         self.output_text = template.render(
             dictInputVars=self.program_inputs,
             dictOutputVars=self.program_outputs,
@@ -1125,7 +1366,8 @@ class Cdl2Plc:
             programs=[self.program_name],
             dictFunctionBlockInstances=self.program_fb_instances,
             dictFunctionBlockInstancesIEC=self.program_fb_instances_iec,
-            dictCdlBlocks=self.dict_cdl_blocks,
+            dictCdlBlocks=self.dict_xml_snippets_of_cdl_block_classes,
+            user_defined_composite_blocks=self.program_user_defined_composite_blocks,
         )
 
         # print output text as string
@@ -1133,11 +1375,14 @@ class Cdl2Plc:
         #     with open("outputText.txt", "w") as outfile:
         #         outfile.write(self.output_text)
 
+        # pretty print
         xml_export = xml.dom.minidom.parseString(self.output_text)
         xml_export = xml_export.toprettyxml()
+
         if self.debug:
             print(xml_export)
 
+        # set output directory
         if self.output_folder is not None:
             directory = self.output_folder + 'IEC61131-10XML/{}'.format(self._program_name)
         else:
@@ -1159,11 +1404,10 @@ class Cdl2Plc:
         self.get_global_xy_shift()
         self.create_xml_local_ids()
         self.create_cxf_connection_structure()
-        self.create_xml_parameters()
+        self.collect_xml_parameters()
         self.create_dict_connections()
         self.create_dicts_for_jinja()
         self.create_dict_cdl_blocks()
-
         self.create_iec_xml()
 
         for variable, value in self.__dict__.items():
@@ -1172,5 +1416,11 @@ class Cdl2Plc:
 
 if __name__ == "__main__":  # pragma: no cover
 
-    cxf_json = 'cxf/ModelicaTestCases/SingleBlocks/Reals/Add.jsonld'
+    cxf_json = [
+        'cxf/ModelicaTestCases/SingleBlocks/Reals/Add.jsonld',
+        "C:\Workdir\Develop\projects\CDL-PLC\paper\cxf\RbcPvt.jsonld",
+        "C:\Workdir\Develop\projects\CDL-PLC\paper\cxf\RbcPasCoo.jsonld",
+        "C:\Workdir\Develop\projects\CDL-PLC\paper\cxf\RbcAshpModulating.jsonld",
+        "C:\Workdir\Develop\projects\CDL-PLC\paper\cxf\RbcHeatingCurve.jsonld",
+        ][-1]
     Cdl2Plc(cxf_json, debug=True).translate()
