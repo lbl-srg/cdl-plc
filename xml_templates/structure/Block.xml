@@ -1,1 +1,10 @@
-<block localId="{{ values.localId }}" typeName="{{ values.instanceType}}" instanceName="{{ key }}" executionOrderId="0" width="{{ values.width }}" height="{{ values.height }}"><position x="{{ values.x }}" y="{{ values.y }}"/><inputVariables>{% for key, value in values.inputs.items() %}{% include "xml_templates/structure/FbdBlockInstanceInVar.xml" %}{% endfor %}</inputVariables><inOutVariables/><outputVariables><variable formalParameter="y"><connectionPointOut><relPosition x="74" y="30"/></connectionPointOut></variable></outputVariables></block>
+<block localId="{{ values.localId }}" typeName="{{ values.ClassName}}" instanceName="{{ key }}" executionOrderId="0" width="{{ values.width }}" height="{{ values.height }}">
+	<position x="{{ values.x_absolute }}" y="{{ values.y_absolute }}"/>
+	<inputVariables>
+		{% for key, value in values.inputs.items() %}{% include "xml_templates/structure/FbdBlockInstanceInVar.xml" %}{% endfor %}
+	</inputVariables>
+	<inOutVariables/>
+	<outputVariables>
+		{% for key, value in values.outputs.items() %}{% include "xml_templates/structure/FbdBlockInstanceOutVar.xml" %}{% endfor %}
+	</outputVariables>
+</block>

@@ -1,1 +1,1 @@
-<variable formalParameter="{{ key }}"><connectionPointIn><relPosition x="0" y="40"/><connection refLocalId="{{ value.id }}"{% if value.link == "" %}{% else %} formalParameter="{{ value.link }}"{% endif %}/></connectionPointIn></variable>
+<variable formalParameter="{{ key }}"><connectionPointIn><relPosition x="0" y="{{ value.y_relative }}"/><connection refLocalId="{{ value.id }}"{% if value.source_block_connector == "" %}{% else %} formalParameter="{{ value.source_block_connector }}"{% endif %}>{{ value.connector_string }}</connection></connectionPointIn></variable>

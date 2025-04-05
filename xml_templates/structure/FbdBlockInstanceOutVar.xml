@@ -1,1 +1,1 @@
-<variable formalParameter="{{ key }}"><connectionPointOut><relPosition x="74" y="30"/></connectionPointOut></variable>
+<variable formalParameter="{{ key }}"><connectionPointOut><relPosition x="{{ value[0].x_relative }}" y="{{ value[0].y_relative }}"/></connectionPointOut></variable>
