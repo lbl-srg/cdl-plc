@@ -1,6 +1,38 @@
-<pou name="Reals_Hysteresis" pouType="functionBlock"><interface><inputVars><variable name="u"><type><REAL/></type></variable><variable name="uLow"><type><REAL/></type></variable><variable name="uHigh"><type><REAL/></type></variable></inputVars><outputVars><variable name="y"><type><BOOL/></type></variable></outputVars></interface><body><ST><xhtml:p><![CDATA[IF u < uLow THEN
+<pou name="Reals_Hysteresis" pouType="functionBlock">
+	<interface>
+		<inputVars>
+			<variable name="u">
+				<type>
+					<REAL/>
+				</type>
+			</variable>
+			<variable name="uLow">
+				<type>
+					<REAL/>
+				</type>
+			</variable>
+			<variable name="uHigh">
+				<type>
+					<REAL/>
+				</type>
+			</variable>
+		</inputVars>
+		<outputVars>
+			<variable name="y">
+				<type>
+					<BOOL/>
+				</type>
+			</variable>
+		</outputVars>
+	</interface>
+	<body>
+		<ST>
+			<xhtml:p><![CDATA[IF u < uLow THEN
 	y := FALSE;
 ELSIF u > uHigh THEN
 	y := TRUE;
 END_IF;
-]]></xhtml:p></ST></body></pou>
+]]></xhtml:p>
+		</ST>
+	</body>
+</pou>

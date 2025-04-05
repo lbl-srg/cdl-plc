@@ -1,1 +1,12 @@
-<pou name="Reals_Line" pouType="functionBlock"><interface><inputVars><variable name="x1"><type><REAL/></type></variable><variable name="f1"><type><REAL/></type></variable><variable name="u"><type><REAL/></type></variable><variable name="x2"><type><REAL/></type></variable><variable name="f2"><type><REAL/></type></variable></inputVars><outputVars><variable name="y"><type><REAL/></type></variable></outputVars></interface><body><ST><xhtml:p><![CDATA[y:=1.0;]]></xhtml:p></ST></body></pou>
+<pou name="Reals_Line" pouType="functionBlock"><interface><inputVars><variable name="x1"><type><REAL/></type></variable><variable name="f1"><type><REAL/></type></variable><variable name="u"><type><REAL/></type></variable><variable name="x2"><type><REAL/></type></variable><variable name="f2"><type><REAL/></type></variable><variable name="limitBelow"><type><BOOL/></type></variable><variable name="limitAbove"><type><BOOL/></type></variable></inputVars><outputVars><variable name="y"><type><REAL/></type></variable></outputVars><localVars><variable name="slope"><type><REAL/></type></variable><variable name="intercept"><type><REAL/></type></variable><variable name="xLim"><type><REAL/></type></variable></localVars></interface><body><ST><xhtml:p><![CDATA[slope := (f2 - f1) / (x2 - x1);
+intercept := f2 - slope * x2;
+IF limitBelow and limitAbove THEN
+	xLim := min(x2,max(x1,u));
+ELSIF limitBelow THEN
+    xLim := max(x1,u);
+ELSIF limitAbove THEN
+    xLim := min(x2,u);
+ELSE
+    xLim := u;
+END_IF;	
+y := slope * xLim + intercept;]]></xhtml:p></ST></body></pou>
