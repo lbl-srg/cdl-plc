@@ -6,6 +6,7 @@ import ast
 import numbers
 import os
 from pathlib import Path
+import iec_standard_function_names
 
 abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath)
@@ -506,10 +507,11 @@ class Cdl2Plc:
         Returns parts after the program name.
         """
 
-        stripped_node_id_string = node["@id"].split("{}.".format(self.program_name))[-1].split(".")
+        node_id_after_program_name = node["@id"].split(f".{self.program_name}.")
+        stripped_node_id_string = node_id_after_program_name[-1].split(".")
 
         if debug:
-            print('stripped_node_id_string: ', stripped_node_id_string)
+            print('Stripped node ID string: ', stripped_node_id_string)
 
         return stripped_node_id_string
 
@@ -1388,11 +1390,11 @@ class Cdl2Plc:
     def create_dict_connections(self):
         """
         Creates a dict with connections.
-        Takes information from the JSONLD about connections and assigns this information to corresponding
-        parts in the XML.
+        Takes information from the JSONLD about connections.
+        Assigns this information to corresponding parts in the XML.
         """
 
-        print("creating dict with connections")
+        print("Creating dict with connections")
 
         # instantiate connections dict from raw connection structure
         self._dict_connections = self._cxf_connection_structure
@@ -1411,19 +1413,21 @@ class Cdl2Plc:
             debug=False,
         )
 
-        # loop over connection and input nodes
+        # loop over JSON nodes of types 'connection' and 'input'
         for count, node in enumerate(connection_and_input_nodes):
+
+            if self.debug:
+                print(f"Status _dict_connections at the beginning of iteration {count+1}:", self._dict_connections)
+                print("JSON node with connection or input:", node)
 
             # check the node type
             node_type = self.check_jsonld_graph_node_type(node, debug=False)
 
             if self.debug:
-                print("Node with connection or input:", node)
-                print("node_type:", node_type)
-                print(f"Status _dict_connections at the beginning of iteration {count+1}:", self._dict_connections)
+                print("JSON node type:", node_type)
 
             # gather information about connection source
-            connection_source_instance_id = '.'.join(self.get_instance_name_from_node(node, debug=False))
+            connection_source_instance_id = '.'.join(self.get_instance_name_from_node(node, debug=True))
 
             if self.debug:
                 print("Source connector of the connection:", connection_source_instance_id)
@@ -1487,7 +1491,8 @@ class Cdl2Plc:
             # write output connections of blocks
             # do that only for connection nodes
             if node_type == self.available_node_types["connection"]:
-                self._dict_connections[dict_connection_source_parameters["source_block_instance"]]["output"][dict_connection_source_parameters["source_block_connector"]] = to_connection_params
+                source_block_instance = dict_connection_source_parameters["source_block_instance"]
+                self._dict_connections[source_block_instance]["output"][dict_connection_source_parameters["source_block_connector"]] = to_connection_params
 
             if self.debug:
                 print("_dict_connections after writing information: ", self._dict_connections)
@@ -1534,6 +1539,12 @@ class Cdl2Plc:
         self._program_name = self.select_jsonld_graph_nodes_by_types(
             [self.available_node_types["program"]],
         )[0]["@id"].split("#")[-1].split(".")[-1]
+
+        # rename to avoid conflict with IEC standard function block names
+        if self._program_name in iec_standard_function_names.iec_standard_function_names:
+            self._program_name_iec = self._program_name + '_renamed'
+        else:
+            self._program_name_iec = self._program_name
 
         if self.debug:
             print("program_name", self._program_name)
@@ -1798,7 +1809,6 @@ class Cdl2Plc:
         # dict_all_block_instances = {}
         # dict_all_block_instances.update(self.program_fb_instances)
         # dict_all_block_instances.update(self.program_user_defined_composite_blocks)
-        # print(1234, dict_all_block_instances)
 
         # loop over all function block instances
         for instance_name, instance_attributes in input_dict.items():
@@ -1927,7 +1937,7 @@ class Cdl2Plc:
             dictInputVars=self.program_inputs,
             dictOutputVars=self.program_outputs,
             dictParameters=self._program_parameters,
-            programs=[self.program_name],
+            programs=[self._program_name_iec],
             dictFunctionBlockInstances=self.program_fb_instances,
             dictFunctionBlockInstancesIEC=self.program_fb_instances_iec,
             dictCdlBlocks=self.dict_xml_snippets_of_cdl_block_classes,
@@ -1979,7 +1989,8 @@ if __name__ == "__main__":  # pragma: no cover
         r"C:\Workdir\Develop\projects\CDL-PLC\paper\cxf\RbcAshpGshpModulating.jsonld",
         r"C:\Workdir\Develop\projects\CDL-PLC\paper\cxf\RbcGshpModulating.jsonld",
         r"C:\Workdir\Develop\projects\CDL-PLC\paper\cxf\RbcHeatingCurve.jsonld",
-        ][-3]
+        r"C:\Workdir\Develop\projects\CDL-PLC\paper\cxf\PID.jsonld",
+        ][-4]
 
     Cdl2Plc(
         cxf_json,
