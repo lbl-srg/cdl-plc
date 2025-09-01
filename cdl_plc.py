@@ -84,6 +84,7 @@ def return_iec_data_type(input):
         par_value_type = "REAL"
     elif isinstance(input, bool):
         par_value_type = "BOOL"
+        parameter_value_local = input
     else:
         print('Case not covered')
         par_value_type = None
@@ -175,7 +176,13 @@ class Cdl2Plc:
         "Reals_Min": ["Reals_Min"],
         "Reals_MultiplyByParameter": ["Reals_MultiplyByParameter"],
         "Reals_Hysteresis": ["Reals_Hysteresis"],
-        "Reals_PID": ["Reals_PID"],
+        "Reals_PID": [
+            "Reals_PID",
+            'Reals_MultiplyByParameter',
+            'Reals_Limiter',
+            'INTEGRATE',
+            'T_PLC_MS',
+        ],
         "Reals_Sources_Constant": ["Reals_Sources_Constant"],
         "Reals_Line": ["Reals_Line"],
         "Reals_MovingAverage": ["Reals_MovingAverage"],
@@ -242,6 +249,7 @@ class Cdl2Plc:
             "array_inputs": set(),
         }
         self.read_and_collect_cdl_block_snippets(self.program_fb_instances)
+        self.read_and_collect_cdl_block_snippets(self.program_fb_instances_block_composite)
         self.add_absolute_x_y_coordinates_of_connectors()
         # self.add_source_block_connector_coordinates()
 
@@ -448,12 +456,23 @@ class Cdl2Plc:
 
                             source_block_instance_outputs = self.program_fb_instances_iec[source_block_instance]['outputs'][source_block_connector][0]
 
-                        else:
+                        elif source_block_instance in self.program_user_defined_composite_blocks:
 
                             if self.debug:
                                 print('Source instance is a user defined function block instance')
 
                             source_block_instance_outputs = self.program_user_defined_composite_blocks[source_block_instance]['outputs'][source_block_connector][0]
+
+                        elif source_block_instance in self.program_fb_instances_block_composite:
+
+                            if self.debug:
+                                print('Source instance is a CDL composite elementary block.')
+
+                            source_block_instance_outputs = self.program_fb_instances_block_composite[source_block_instance]['outputs'][source_block_connector][0]
+
+                        else:
+
+                            print('Source instance is not assigned.')
 
                         if self.debug:
                             print('Outputs of the function block instance:', source_block_instance_outputs)
@@ -707,7 +726,7 @@ class Cdl2Plc:
         width = graph_info[1]["x"] - x
         height = graph_info[1]["y"] - y
         if shift:
-            scale_factor_x = 6
+            scale_factor_x = 4
             scale_factor_y = 2
             x = (x + self.x_shift) * scale_factor_x
             y = (y + height - self.y_shift) * scale_factor_y
@@ -1104,6 +1123,7 @@ class Cdl2Plc:
 
         node_type = None
 
+        # Parameter definition
         # this is a parameter of a block
         if set(keys).issubset({"@id", "S231P:isFinal", "S231P:value"}):
 
@@ -1122,19 +1142,12 @@ class Cdl2Plc:
             else:
                 node_type = self.available_node_types["parameter_definition"]
 
-        # elif keys == [
-        #     "@id",
-        #     "@type",
-        #     "S231P:accessSpecifier",
-        #     "S231P:description",
-        #     "S231P:isOfDataType",
-        #     "S231P:label",
-        #     "S231P:value",
-        # ]:
+        # Parameter assignment
         elif ("@type" in keys) and (node["@type"] == "S231P:Parameter"):
 
             node_type = self.available_node_types["parameter_assignment"]
 
+        # Connection
         elif keys == ["@id", "S231P:isConnectedTo"]:
 
             check_is_connected_to_keys = node["S231P:isConnectedTo"]
@@ -1173,6 +1186,7 @@ class Cdl2Plc:
         elif ("@type" in keys) and (node["@type"] == "S231P:IntegerInput"):
             node_type = self.available_node_types["input_int"]
 
+        # CDL blocks
         elif set(keys).issubset({
             "@id",
             "@type",
@@ -1196,9 +1210,11 @@ class Cdl2Plc:
             else:
                 node_type = self.available_node_types["fb_instance"]
 
+        # Program
         elif ("@type" in node.keys()) and (node["@type"] == "S231P:Block"):
             node_type = self.available_node_types["program"]
 
+        # User-defined composite block
         else:
             node_type = self.available_node_types["user_defined_composite_block"]
 
@@ -1231,7 +1247,7 @@ class Cdl2Plc:
         """
 
         if '_renamed' in file_path.name:
-            file_path = file_path.replace('_renamed', '')
+            file_path = Path(str(file_path).replace('_renamed', ''))
 
         with open(file_path, "r", encoding="utf-8") as file:
 
@@ -1895,9 +1911,10 @@ class Cdl2Plc:
         the sets contain the IEC XML snippets
         """
 
+        print('Collecting IEC XML snippets of CDL block classes used.')
+
         if self.debug:
-            print('input_dict', input_dict)
-            print('program_user_defined_composite_blocks', self.program_user_defined_composite_blocks)
+            print('Input dict', input_dict)
 
         # # merge regular CDL blocks and CDL blocks from user defined composite blocks
         # dict_all_block_instances = {}
@@ -1908,7 +1925,8 @@ class Cdl2Plc:
         for instance_name, instance_attributes in input_dict.items():
 
             if self.debug:
-                print(instance_name, instance_attributes)
+                print('Block instance name:', instance_name)
+                print('Block instance attributes:', instance_attributes)
 
             cdl_instance_type = instance_attributes["ClassName"]
 
@@ -1916,7 +1934,8 @@ class Cdl2Plc:
             if cdl_instance_type in self.dict_map_blocks_to_files.keys():
                 files_to_load = self.dict_map_blocks_to_files[cdl_instance_type]
                 if self.debug:
-                    print(instance_name, cdl_instance_type, files_to_load)
+                    print('Block instance type:', cdl_instance_type)
+                    print('Files to load:', files_to_load)
 
                 for file in files_to_load:
                     with open("xml_templates/function_blocks/{}.xml".format(file), "r") as fileBlock:
@@ -1975,10 +1994,7 @@ class Cdl2Plc:
         template_env = jinja2.Environment(loader=template_loader)
 
         # fileTemplateVariable = "templateVariable.xml"
-        file_template_global = [
-            "xml_templates/structure/Global_beremiz.xml",
-            "templateVariable.xml",
-        ][0]
+        file_template_global = "xml_templates/structure/Global_beremiz.xml"
 
         if debug:
             print('cwd: ', os.getcwd())
@@ -1997,7 +2013,7 @@ class Cdl2Plc:
             for user_defined_composite_block_instance, values in self.program_user_defined_composite_blocks.items():
 
                 # Compose file name of user-defined composite block
-                file = os.path.join(self.jsonld_directory, user_defined_composite_block_instance + '.jsonld')
+                file = self.jsonld_directory / (user_defined_composite_block_instance + '.jsonld')
 
                 if self.debug:
                     print('jsonld file name of user def comp block:', file)
@@ -2027,53 +2043,6 @@ class Cdl2Plc:
                 # append to list
                 self.user_defined_composite_block_xml_snippets.append(user_defined_composite_block_xml_snippet)
 
-        # check if CDL composite blocks are present
-        # these have to be rendered
-        if self.program_fb_instances_block_composite:
-
-            print('These CDL composite blocks have to be rendered:',
-                  self.program_fb_instances_block_composite.keys())
-
-            # loop over CDL composite block instances
-            # create XML snippet for each CDL composite block
-            # append to dict
-            for cdl_composite_block_instance, values in self.program_fb_instances_block_composite.items():
-
-                cdl_class_name = values['ClassName']
-
-                # Compose file name of CDL composite block
-                file = self.jsonld_directory / Path(cdl_class_name + '.jsonld')
-
-                if self.debug:
-                    print('JSON-LD file name of CDL composite block:', file)
-                    print('JSON-LD file name of CDL composite block:', type(file))
-
-                # Load JSON-LD file of user-defined function block snippet
-                composite_block_jsonld = self.load_jsonld(file)
-
-                if self.debug:
-                    print('JSON-LD of CDL composite block:', composite_block_jsonld)
-
-                # instantiate translator class
-                file_instance = Cdl2Plc(file, debug=self.debug)
-
-                print(f'Print class variables of {file_instance._program_name}')
-
-                for variable, value in file_instance.__dict__.items():
-                    print(f"{variable}: {value}")
-
-                # get CDL classes and collect XML snippets
-                self.read_and_collect_cdl_block_snippets(file_instance.program_fb_instances)
-
-                # translate JSON-LD of user-defined composite block to XML snippet
-                user_defined_composite_block_xml_snippet = file_instance.translate_user_defined_composite_block(
-                    values['ClassName'])
-
-                print('XML snippet of user defined composite block', user_defined_composite_block_xml_snippet)
-
-                # append to list
-                self.user_defined_composite_block_xml_snippets.append(user_defined_composite_block_xml_snippet)
-
         # render template
         # create output text
         self.output_text = template.render(
@@ -2083,6 +2052,7 @@ class Cdl2Plc:
             dictParameters=self._program_parameters,
             programs=[self._program_name_iec],
             dictFunctionBlockInstances=self.program_fb_instances,
+            dictFunctionBlockInstancesComposite=self.program_fb_instances_block_composite,
             dictFunctionBlockInstancesIEC=self.program_fb_instances_iec,
             dictCdlBlocks=self.dict_xml_snippets_of_cdl_block_classes,
             program_user_defined_composite_blocks=self.program_user_defined_composite_blocks,
@@ -2122,22 +2092,24 @@ class Cdl2Plc:
         for variable, value in self.__dict__.items():
             print(f"{variable}: {value}")
 
+        shutil.copyfile('xml_templates/structure/beremiz.xml', Path(directory) / 'beremiz.xml' )
+
 
 if __name__ == "__main__":  # pragma: no cover
 
     cxf_json = [
         'cxf/ModelicaTestCases/SingleBlocks/Reals/Add.jsonld',
-        r"C:\Workdir\Develop\projects\CDL-PLC\paper\cxf\RbcPvt.jsonld",
-        r"C:\Workdir\Develop\projects\CDL-PLC\paper\cxf\RbcPasCoo.jsonld",
-        r"C:\Workdir\Develop\projects\CDL-PLC\paper\cxf\RbcAshpModulating.jsonld",
-        r"C:\Workdir\Develop\projects\CDL-PLC\paper\cxf\RbcAshpGshpModulating.jsonld",
-        r"C:\Workdir\Develop\projects\CDL-PLC\paper\cxf\RbcGshpModulating.jsonld",
-        r"C:\Workdir\Develop\projects\CDL-PLC\paper\cxf\RbcHeatingCurve.jsonld",
-        r"C:\Workdir\Develop\projects\CDL-PLC\paper\cxf\PID.jsonld",
+        "C:/Workdir/Develop/projects/CDL-PLC/paper/cxf/RbcPvt.jsonld",
+        "C:/Workdir/Develop/projects/CDL-PLC/paper/cxf/RbcPasCoo.jsonld",
+        "C:/Workdir/Develop/projects/CDL-PLC/paper/cxf/RbcAshpModulating.jsonld",
+        "C:/Workdir/Develop/projects/CDL-PLC/paper/cxf/RbcAshpGshpModulating.jsonld",
+        "C:/Workdir/Develop/projects/CDL-PLC/paper/cxf/RbcGshpModulating.jsonld",
+        "C:/Workdir/Develop/projects/CDL-PLC/paper/cxf/RbcHeatingCurve.jsonld",
+        "C:/Workdir/Develop/projects/CDL-PLC/paper/cxf/PID.jsonld",
         "C:/Workdir/Develop/projects/CDL-PLC/translator/cdl-plc/cxf/ModelicaTestCases/SingleBlocks/Reals/MultiplyByParameter_1.jsonld",
         "C:/Workdir/Develop/projects/CDL-PLC/translator/cdl-plc/cxf/ModelicaTestCases/SingleBlocks/Reals/MultiplyByParameter_2.jsonld",
         "C:/Workdir/Develop/projects/CDL-PLC/translator/cdl-plc/cxf/ModelicaTestCases/CompositeBlocks/CustomPWithLimiter.jsonld",
-        ][-1]
+        ][-7]
 
     Cdl2Plc(
         cxf_json,
