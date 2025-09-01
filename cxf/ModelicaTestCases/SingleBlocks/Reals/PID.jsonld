@@ -1,0 +1,98 @@
+{
+  "@context": {
+    "S231P": "https://data.ashrae.org/S231P#"
+  },
+  "@graph": [
+    {
+      "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.PID",
+      "@type": "S231P:Block",
+      "S231P:containsBlock": {
+        "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.PID.conPID"
+      },
+      "S231P:hasInput": [
+        {
+          "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.PID.u_m"
+        },
+        {
+          "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.PID.u_s"
+        }
+      ],
+      "S231P:hasOutput": {
+        "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.PID.y"
+      },
+      "S231P:label": "PID"
+    },
+    {
+      "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.PID.conPID",
+      "@type": "https://data.ashrae.org/S231P#Buildings.Controls.OBC.CDL.Reals.PID",
+      "S231P:accessSpecifier": "public",
+      "S231P:graphics": "{\"Placement\":{\"transformation\":{\"extent\":[{\"x\":-10,\"y\":-10},{\"x\":10,\"y\":10}]}}}",
+      "S231P:hasInstance": [
+        {
+          "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.PID.conPID.k"
+        },
+        {
+          "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.PID.conPID.reverseActing"
+        },
+        {
+          "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.PID.conPID.Ti"
+        },
+        {
+          "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.PID.conPID.u_m"
+        },
+        {
+          "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.PID.conPID.u_s"
+        },
+        {
+          "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.PID.conPID.y"
+        }
+      ],
+      "S231P:label": "conPID"
+    },
+    {
+      "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.PID.conPID.k",
+      "S231P:value": 1
+    },
+    {
+      "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.PID.conPID.reverseActing",
+      "S231P:value": true
+    },
+    {
+      "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.PID.conPID.Ti",
+      "S231P:value": 100
+    },
+    {
+      "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.PID.conPID.y",
+      "S231P:isConnectedTo": {
+        "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.PID.y"
+      }
+    },
+    {
+      "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.PID.u_m",
+      "@type": "S231P:RealInput",
+      "S231P:accessSpecifier": "public",
+      "S231P:graphics": "{\"Placement\":{\"transformation\":{\"extent\":[{\"x\":-140,\"y\":-82},{\"x\":-100,\"y\":-42}]}}}",
+      "S231P:isConnectedTo": {
+        "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.PID.conPID.u_m"
+      },
+      "S231P:label": "u_m"
+    },
+    {
+      "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.PID.u_s",
+      "@type": "S231P:RealInput",
+      "S231P:accessSpecifier": "public",
+      "S231P:graphics": "{\"Placement\":{\"transformation\":{\"extent\":[{\"x\":-140,\"y\":0},{\"x\":-100,\"y\":40}]}}}",
+      "S231P:isConnectedTo": {
+        "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.PID.conPID.u_s"
+      },
+      "S231P:label": "u_s"
+    },
+    {
+      "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.PID.y",
+      "@type": "S231P:RealOutput",
+      "S231P:accessSpecifier": "public",
+      "S231P:graphics": "{\"Placement\":{\"transformation\":{\"extent\":[{\"x\":100,\"y\":-20},{\"x\":140,\"y\":20}]}}}",
+      "S231P:label": "y"
+    }
+  ]
+}
