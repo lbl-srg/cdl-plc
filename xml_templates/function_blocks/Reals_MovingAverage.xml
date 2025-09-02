@@ -1,0 +1,1 @@
+<pou name="Reals_MovingAverage" pouType="functionBlock"><interface><inputVars><variable name="u"><type><REAL/></type></variable><variable name="delta"><type><REAL/></type></variable></inputVars><outputVars><variable name="y"><type><REAL/></type></variable></outputVars></interface><body><ST><xhtml:p><![CDATA[y:=1.0;]]></xhtml:p></ST></body></pou>

@@ -1,0 +1,80 @@
+      <pou name="T_PLC_MS" pouType="function">
+        <interface>
+          <returnType>
+            <UDINT/>
+          </returnType>
+          <localVars>
+            <variable name="tx">
+              <type>
+                <UDINT/>
+              </type>
+            </variable>
+          </localVars>
+          <inputVars>
+            <variable name="debug">
+              <type>
+                <BOOL/>
+              </type>
+            </variable>
+          </inputVars>
+          <localVars>
+            <variable name="N">
+              <type>
+                <INT/>
+              </type>
+              <initialValue>
+                <simpleValue value="0"/>
+              </initialValue>
+            </variable>
+            <variable name="offset">
+              <type>
+                <UDINT/>
+              </type>
+              <initialValue>
+                <simpleValue value="0"/>
+              </initialValue>
+            </variable>
+            <variable name="temp">
+              <type>
+                <DWORD/>
+              </type>
+              <initialValue>
+                <simpleValue value="1"/>
+              </initialValue>
+            </variable>
+          </localVars>
+        </interface>
+        <body>
+          <ST>
+            <xhtml:p><![CDATA[tx := 0;
+
+{extern unsigned long __tick;
+extern unsigned long long common_ticktime__;
+unsigned long long ticktime_ms = (common_ticktime__)/1000000;
+UDINT plc_time = (UDINT)(ticktime_ms * (unsigned long long)__tick);
+TX = plc_time}
+
+T_PLC_MS := tx;
+IF debug THEN
+	T_PLC_MS := (DWORD_TO_UDINT(SHL(UDINT_TO_DWORD(T_PLC_MS),N) OR SHL(temp,N))-1) + OFFSET;
+END_IF;
+
+(* Original Code:
+tx := TIME();
+T_PLC_MS := TIME_TO_DWORD(Tx);
+IF debug THEN
+	T_PLC_MS := (SHL(T_PLC_MS,N) OR SHL(DWORD#1,N)-1) + OFFSET;
+END_IF;
+*)
+
+(* From OSCAT library, www.oscat.de
+
+this is a temporary T_PLC_MS FB until OpenPLC gets it´s own time() functionality *)
+
+(* PLC_TIME and Global variables PLC_SCAN_CYCL and PLC_CYCL_TIME required *)]]></xhtml:p>
+          </ST>
+        </body>
+        <documentation>
+          <xhtml:p><![CDATA[Output current execution time in miliseconds]]></xhtml:p>
+        </documentation>
+      </pou>

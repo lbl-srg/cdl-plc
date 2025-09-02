@@ -1,0 +1,5 @@
+<pou name="Reals_Switch" pouType="functionBlock"><interface><inputVars><variable name="u1"><type><REAL/></type></variable><variable name="u2"><type><BOOL/></type></variable><variable name="u3"><type><REAL/></type></variable></inputVars><outputVars><variable name="y"><type><REAL/></type></variable></outputVars></interface><body><ST><xhtml:p><![CDATA[IF u2 THEN
+	y := u1;
+ELSE
+	y := u3;
+END_IF;]]></xhtml:p></ST></body></pou>
