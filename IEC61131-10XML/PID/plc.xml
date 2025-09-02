@@ -95,28 +95,28 @@
 							<expression>u_s</expression>
 						</inVariable>
 						<inVariable localId="8" executionOrderId="0" width="26" height="26" negated="false">
-							<position x="734" y="177"/>
+							<position x="474" y="177"/>
 							<connectionPointOut>
 								<relPosition x="26" y="13"/>
 							</connectionPointOut>
 							<expression>_1</expression>
 						</inVariable>
 						<inVariable localId="6" executionOrderId="0" width="50" height="26" negated="false">
-							<position x="710" y="137"/>
+							<position x="450" y="137"/>
 							<connectionPointOut>
 								<relPosition x="50" y="13"/>
 							</connectionPointOut>
 							<expression>_True</expression>
 						</inVariable>
 						<inVariable localId="7" executionOrderId="0" width="42" height="26" negated="false">
-							<position x="718" y="157"/>
+							<position x="458" y="157"/>
 							<connectionPointOut>
 								<relPosition x="42" y="13"/>
 							</connectionPointOut>
 							<expression>_100</expression>
 						</inVariable>
 						<inVariable localId="9" executionOrderId="0" width="26" height="26" negated="false">
-							<position x="734" y="197"/>
+							<position x="474" y="197"/>
 							<connectionPointOut>
 								<relPosition x="26" y="13"/>
 							</connectionPointOut>
@@ -125,7 +125,7 @@
 						<block localId="1" typeName="Reals_PID" instanceName="conPID" executionOrderId="0" width="82" height="160">
 							
 	
-							<position x="780" y="60"/>
+							<position x="520" y="60"/>
 							
 	
 							<inputVariables>
@@ -135,9 +135,9 @@
 									<connectionPointIn>
 										<relPosition x="0" y="30"/>
 										<connection refLocalId="2">
-											<position x="780" y="90"/>
-											<position x="390" y="90"/>
-											<position x="390" y="164"/>
+											<position x="520" y="90"/>
+											<position x="260" y="90"/>
+											<position x="260" y="164"/>
 											<position x="0" y="164"/>
 										</connection>
 									</connectionPointIn>
@@ -146,9 +146,9 @@
 									<connectionPointIn>
 										<relPosition x="0" y="50"/>
 										<connection refLocalId="3">
-											<position x="780" y="110"/>
-											<position x="390" y="110"/>
-											<position x="390" y="0"/>
+											<position x="520" y="110"/>
+											<position x="260" y="110"/>
+											<position x="260" y="0"/>
 											<position x="0" y="0"/>
 										</connection>
 									</connectionPointIn>
@@ -157,10 +157,10 @@
 									<connectionPointIn>
 										<relPosition x="0" y="70"/>
 										<connection refLocalId="8">
-											<position x="780" y="130"/>
-											<position x="770" y="130"/>
-											<position x="770" y="130"/>
-											<position x="760" y="130"/>
+											<position x="520" y="130"/>
+											<position x="510" y="130"/>
+											<position x="510" y="130"/>
+											<position x="500" y="130"/>
 										</connection>
 									</connectionPointIn>
 								</variable>
@@ -168,10 +168,10 @@
 									<connectionPointIn>
 										<relPosition x="0" y="90"/>
 										<connection refLocalId="6">
-											<position x="780" y="150"/>
-											<position x="770" y="150"/>
-											<position x="770" y="150"/>
-											<position x="760" y="150"/>
+											<position x="520" y="150"/>
+											<position x="510" y="150"/>
+											<position x="510" y="150"/>
+											<position x="500" y="150"/>
 										</connection>
 									</connectionPointIn>
 								</variable>
@@ -179,10 +179,10 @@
 									<connectionPointIn>
 										<relPosition x="0" y="110"/>
 										<connection refLocalId="7">
-											<position x="780" y="170"/>
-											<position x="770" y="170"/>
-											<position x="770" y="170"/>
-											<position x="760" y="170"/>
+											<position x="520" y="170"/>
+											<position x="510" y="170"/>
+											<position x="510" y="170"/>
+											<position x="500" y="170"/>
 										</connection>
 									</connectionPointIn>
 								</variable>
@@ -190,10 +190,10 @@
 									<connectionPointIn>
 										<relPosition x="0" y="130"/>
 										<connection refLocalId="8">
-											<position x="780" y="190"/>
-											<position x="770" y="190"/>
-											<position x="770" y="190"/>
-											<position x="760" y="190"/>
+											<position x="520" y="190"/>
+											<position x="510" y="190"/>
+											<position x="510" y="190"/>
+											<position x="500" y="190"/>
 										</connection>
 									</connectionPointIn>
 								</variable>
@@ -201,10 +201,10 @@
 									<connectionPointIn>
 										<relPosition x="0" y="150"/>
 										<connection refLocalId="9">
-											<position x="780" y="210"/>
-											<position x="770" y="210"/>
-											<position x="770" y="210"/>
-											<position x="760" y="210"/>
+											<position x="520" y="210"/>
+											<position x="510" y="210"/>
+											<position x="510" y="210"/>
+											<position x="500" y="210"/>
 										</connection>
 									</connectionPointIn>
 								</variable>
@@ -231,47 +231,19 @@
 
 						</block>
 						<outVariable localId="4" executionOrderId="0" width="18" height="26" negated="false">
-							<position x="1440" y="40"/>
+							<position x="960" y="40"/>
 							<connectionPointIn>
 								<relPosition x="0" y="22"/>
 								<connection refLocalId="1" formalParameter="y">
-									<position x="1440" y="53"/>
-									<position x="1151" y="53"/>
-									<position x="1151" y="90"/>
-									<position x="862" y="90"/>
+									<position x="960" y="53"/>
+									<position x="781" y="53"/>
+									<position x="781" y="90"/>
+									<position x="602" y="90"/>
 								</connection>
 							</connectionPointIn>
 							<expression>y</expression>
 						</outVariable>
 					</FBD>
-				</body>
-			</pou>
-			<pou name="Reals_MultiplyByParameter" pouType="functionBlock">
-				<interface>
-					<inputVars>
-						<variable name="u">
-							<type>
-								<REAL/>
-							</type>
-						</variable>
-						<variable name="k">
-							<type>
-								<REAL/>
-							</type>
-						</variable>
-					</inputVars>
-					<outputVars>
-						<variable name="y">
-							<type>
-								<REAL/>
-							</type>
-						</variable>
-					</outputVars>
-				</interface>
-				<body>
-					<ST>
-						<xhtml:p><![CDATA[y := k * u;]]></xhtml:p>
-					</ST>
 				</body>
 			</pou>
 			      
@@ -3170,6 +3142,34 @@
 			</pou>
 			
 
+			<pou name="Reals_MultiplyByParameter" pouType="functionBlock">
+				<interface>
+					<inputVars>
+						<variable name="u">
+							<type>
+								<REAL/>
+							</type>
+						</variable>
+						<variable name="k">
+							<type>
+								<REAL/>
+							</type>
+						</variable>
+					</inputVars>
+					<outputVars>
+						<variable name="y">
+							<type>
+								<REAL/>
+							</type>
+						</variable>
+					</outputVars>
+				</interface>
+				<body>
+					<ST>
+						<xhtml:p><![CDATA[y := k * u;]]></xhtml:p>
+					</ST>
+				</body>
+			</pou>
 			<pou name="Reals_Limiter" pouType="functionBlock">
 				<interface>
 					<inputVars>
@@ -3204,196 +3204,6 @@
 				</body>
 			</pou>
 			      
-			<pou name="T_PLC_MS" pouType="function">
-				
-        
-				<interface>
-					
-          
-					<returnType>
-						
-            
-						<UDINT/>
-						
-          
-					</returnType>
-					
-          
-					<localVars>
-						
-            
-						<variable name="tx">
-							
-              
-							<type>
-								
-                
-								<UDINT/>
-								
-              
-							</type>
-							
-            
-						</variable>
-						
-          
-					</localVars>
-					
-          
-					<inputVars>
-						
-            
-						<variable name="debug">
-							
-              
-							<type>
-								
-                
-								<BOOL/>
-								
-              
-							</type>
-							
-            
-						</variable>
-						
-          
-					</inputVars>
-					
-          
-					<localVars>
-						
-            
-						<variable name="N">
-							
-              
-							<type>
-								
-                
-								<INT/>
-								
-              
-							</type>
-							
-              
-							<initialValue>
-								
-                
-								<simpleValue value="0"/>
-								
-              
-							</initialValue>
-							
-            
-						</variable>
-						
-            
-						<variable name="offset">
-							
-              
-							<type>
-								
-                
-								<UDINT/>
-								
-              
-							</type>
-							
-              
-							<initialValue>
-								
-                
-								<simpleValue value="0"/>
-								
-              
-							</initialValue>
-							
-            
-						</variable>
-						
-            
-						<variable name="temp">
-							
-              
-							<type>
-								
-                
-								<DWORD/>
-								
-              
-							</type>
-							
-              
-							<initialValue>
-								
-                
-								<simpleValue value="1"/>
-								
-              
-							</initialValue>
-							
-            
-						</variable>
-						
-          
-					</localVars>
-					
-        
-				</interface>
-				
-        
-				<body>
-					
-          
-					<ST>
-						
-            
-						<xhtml:p><![CDATA[tx := 0;
-
-{extern unsigned long __tick;
-extern unsigned long long common_ticktime__;
-unsigned long long ticktime_ms = (common_ticktime__)/1000000;
-UDINT plc_time = (UDINT)(ticktime_ms * (unsigned long long)__tick);
-TX = plc_time}
-
-T_PLC_MS := tx;
-IF debug THEN
-	T_PLC_MS := (DWORD_TO_UDINT(SHL(UDINT_TO_DWORD(T_PLC_MS),N) OR SHL(temp,N))-1) + OFFSET;
-END_IF;
-
-(* Original Code:
-tx := TIME();
-T_PLC_MS := TIME_TO_DWORD(Tx);
-IF debug THEN
-	T_PLC_MS := (SHL(T_PLC_MS,N) OR SHL(DWORD#1,N)-1) + OFFSET;
-END_IF;
-*)
-
-(* From OSCAT library, www.oscat.de
-
-this is a temporary T_PLC_MS FB until OpenPLC gets itÂ´s own time() functionality *)
-
-(* PLC_TIME and Global variables PLC_SCAN_CYCL and PLC_CYCL_TIME required *)]]></xhtml:p>
-						
-          
-					</ST>
-					
-        
-				</body>
-				
-        
-				<documentation>
-					
-          
-					<xhtml:p><![CDATA[Output current execution time in miliseconds]]></xhtml:p>
-					
-        
-				</documentation>
-				
-      
-			</pou>
-			
-      
 			<pou name="INTEGRATE" pouType="functionBlock">
 				
         
@@ -3590,6 +3400,196 @@ last := tx;
 					
           
 					<xhtml:p><![CDATA[integrate is a plain integrator with I/O for out]]></xhtml:p>
+					
+        
+				</documentation>
+				
+      
+			</pou>
+			
+      
+			<pou name="T_PLC_MS" pouType="function">
+				
+        
+				<interface>
+					
+          
+					<returnType>
+						
+            
+						<UDINT/>
+						
+          
+					</returnType>
+					
+          
+					<localVars>
+						
+            
+						<variable name="tx">
+							
+              
+							<type>
+								
+                
+								<UDINT/>
+								
+              
+							</type>
+							
+            
+						</variable>
+						
+          
+					</localVars>
+					
+          
+					<inputVars>
+						
+            
+						<variable name="debug">
+							
+              
+							<type>
+								
+                
+								<BOOL/>
+								
+              
+							</type>
+							
+            
+						</variable>
+						
+          
+					</inputVars>
+					
+          
+					<localVars>
+						
+            
+						<variable name="N">
+							
+              
+							<type>
+								
+                
+								<INT/>
+								
+              
+							</type>
+							
+              
+							<initialValue>
+								
+                
+								<simpleValue value="0"/>
+								
+              
+							</initialValue>
+							
+            
+						</variable>
+						
+            
+						<variable name="offset">
+							
+              
+							<type>
+								
+                
+								<UDINT/>
+								
+              
+							</type>
+							
+              
+							<initialValue>
+								
+                
+								<simpleValue value="0"/>
+								
+              
+							</initialValue>
+							
+            
+						</variable>
+						
+            
+						<variable name="temp">
+							
+              
+							<type>
+								
+                
+								<DWORD/>
+								
+              
+							</type>
+							
+              
+							<initialValue>
+								
+                
+								<simpleValue value="1"/>
+								
+              
+							</initialValue>
+							
+            
+						</variable>
+						
+          
+					</localVars>
+					
+        
+				</interface>
+				
+        
+				<body>
+					
+          
+					<ST>
+						
+            
+						<xhtml:p><![CDATA[tx := 0;
+
+{extern unsigned long __tick;
+extern unsigned long long common_ticktime__;
+unsigned long long ticktime_ms = (common_ticktime__)/1000000;
+UDINT plc_time = (UDINT)(ticktime_ms * (unsigned long long)__tick);
+TX = plc_time}
+
+T_PLC_MS := tx;
+IF debug THEN
+	T_PLC_MS := (DWORD_TO_UDINT(SHL(UDINT_TO_DWORD(T_PLC_MS),N) OR SHL(temp,N))-1) + OFFSET;
+END_IF;
+
+(* Original Code:
+tx := TIME();
+T_PLC_MS := TIME_TO_DWORD(Tx);
+IF debug THEN
+	T_PLC_MS := (SHL(T_PLC_MS,N) OR SHL(DWORD#1,N)-1) + OFFSET;
+END_IF;
+*)
+
+(* From OSCAT library, www.oscat.de
+
+this is a temporary T_PLC_MS FB until OpenPLC gets it's own time() functionality *)
+
+(* PLC_TIME and Global variables PLC_SCAN_CYCL and PLC_CYCL_TIME required *)]]></xhtml:p>
+						
+          
+					</ST>
+					
+        
+				</body>
+				
+        
+				<documentation>
+					
+          
+					<xhtml:p><![CDATA[Output current execution time in miliseconds]]></xhtml:p>
 					
         
 				</documentation>

@@ -217,7 +217,7 @@ class Cdl2Plc:
         self.io_height = 26
 
         self.cxf_file = cxf_filename
-        self.output_folder = output_folder
+        self.output_folder = Path(output_folder)
 
         # properties
         self._multi_input_blocks = None
@@ -245,8 +245,8 @@ class Cdl2Plc:
         self._program_parameters = self.collect_xml_parameters()
         self.program_inputs, self.program_outputs, self.program_fb_instances, self.program_fb_instances_iec, self.program_user_defined_composite_blocks, self.program_fb_instances_block_composite = self.create_dicts_for_jinja()
         self.dict_xml_snippets_of_cdl_block_classes = {
-            "scalar_inputs": set(),
-            "array_inputs": set(),
+            "scalar_inputs": [],
+            "array_inputs": [],
         }
         self.read_and_collect_cdl_block_snippets(self.program_fb_instances)
         self.read_and_collect_cdl_block_snippets(self.program_fb_instances_block_composite)
@@ -1940,7 +1940,7 @@ class Cdl2Plc:
                 for file in files_to_load:
                     with open("xml_templates/function_blocks/{}.xml".format(file), "r") as fileBlock:
                         cdl_block = fileBlock.read()
-                    self.dict_xml_snippets_of_cdl_block_classes["scalar_inputs"].add(cdl_block)
+                    self.dict_xml_snippets_of_cdl_block_classes["scalar_inputs"].append(cdl_block)
 
         # return self.dict_xml_snippets_of_cdl_block_classes
 
@@ -2073,9 +2073,9 @@ class Cdl2Plc:
 
         # set output directory
         if self.output_folder is not None:
-            directory = self.output_folder + 'IEC61131-10XML/{}'.format(self._program_name)
+            directory = self.output_folder / Path('IEC61131-10XML') / Path(self._program_name)
         else:
-            directory = 'IEC61131-10XML/{}'.format(self._program_name)
+            directory = Path('IEC61131-10XML') / Path(self._program_name)
         if os.path.exists(directory):
             shutil.rmtree(directory)
         os.makedirs(directory)

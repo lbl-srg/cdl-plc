@@ -59,7 +59,7 @@
 							<expression>u2</expression>
 						</inVariable>
 						<inVariable localId="4" executionOrderId="0" width="26" height="26" negated="false">
-							<position x="758" y="57"/>
+							<position x="490" y="57"/>
 							<connectionPointOut>
 								<relPosition x="26" y="13"/>
 							</connectionPointOut>
@@ -68,7 +68,7 @@
 						<block localId="1" typeName="Reals_MultiplyByParameter" instanceName="gain" executionOrderId="0" width="210" height="60">
 							
 	
-							<position x="804" y="20"/>
+							<position x="536" y="20"/>
 							
 	
 							<inputVariables>
@@ -78,9 +78,9 @@
 									<connectionPointIn>
 										<relPosition x="0" y="30"/>
 										<connection refLocalId="2">
-											<position x="804" y="50"/>
-											<position x="402" y="50"/>
-											<position x="402" y="0"/>
+											<position x="536" y="50"/>
+											<position x="268" y="50"/>
+											<position x="268" y="0"/>
 											<position x="0" y="0"/>
 										</connection>
 									</connectionPointIn>
@@ -89,10 +89,10 @@
 									<connectionPointIn>
 										<relPosition x="0" y="50"/>
 										<connection refLocalId="4">
-											<position x="804" y="70"/>
-											<position x="794" y="70"/>
-											<position x="794" y="70"/>
-											<position x="784" y="70"/>
+											<position x="536" y="70"/>
+											<position x="526" y="70"/>
+											<position x="526" y="70"/>
+											<position x="516" y="70"/>
 										</connection>
 									</connectionPointIn>
 								</variable>
@@ -119,14 +119,14 @@
 
 						</block>
 						<outVariable localId="3" executionOrderId="0" width="26" height="26" negated="false">
-							<position x="1440" y="0"/>
+							<position x="960" y="0"/>
 							<connectionPointIn>
 								<relPosition x="0" y="22"/>
 								<connection refLocalId="1" formalParameter="y">
-									<position x="1440" y="13"/>
-									<position x="1227" y="13"/>
-									<position x="1227" y="50"/>
-									<position x="1014" y="50"/>
+									<position x="960" y="13"/>
+									<position x="853" y="13"/>
+									<position x="853" y="50"/>
+									<position x="746" y="50"/>
 								</connection>
 							</connectionPointIn>
 							<expression>y1</expression>
