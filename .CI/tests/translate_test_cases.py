@@ -16,15 +16,15 @@ args = parser.parse_args()
 output_folder = args.output
 
 test_cases = [
-    cxf_json_path + 'SingleBlocks/Reals/' + 'Add',
-    cxf_json_path + 'SingleBlocks/Reals/' + 'MultiplyByParameter_1',
-    cxf_json_path + 'SingleBlocks/Reals/' + 'MultiplyByParameter_2',
+    # cxf_json_path + 'SingleBlocks/Reals/' + 'Add',
+    # cxf_json_path + 'SingleBlocks/Reals/' + 'MultiplyByParameter_1',
+    # cxf_json_path + 'SingleBlocks/Reals/' + 'MultiplyByParameter_2',
     cxf_json_path + 'SingleBlocks/Reals/' + 'PID',
 
-    cxf_json_path + 'CompositeBlocks/' + "CustomPWithLimiter",
-    cxf_json_path + 'CompositeBlocks/' + "Custom01",
-    cxf_json_path + 'CompositeBlocks/' + "Custom02",
-    cxf_json_path + 'CompositeBlocks/' + "Custom03",
+    # cxf_json_path + 'CompositeBlocks/' + "CustomPWithLimiter",
+    # cxf_json_path + 'CompositeBlocks/' + "Custom01",
+    # cxf_json_path + 'CompositeBlocks/' + "Custom02",
+    # cxf_json_path + 'CompositeBlocks/' + "Custom03",
 ]
 
 for test_case in test_cases:
