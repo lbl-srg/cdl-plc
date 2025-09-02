@@ -217,7 +217,7 @@ class Cdl2Plc:
         self.io_height = 26
 
         self.cxf_file = cxf_filename
-        self.output_folder = output_folder
+        self.output_folder = Path(output_folder)
 
         # properties
         self._multi_input_blocks = None
@@ -2073,9 +2073,9 @@ class Cdl2Plc:
 
         # set output directory
         if self.output_folder is not None:
-            directory = self.output_folder + 'IEC61131-10XML/{}'.format(self._program_name)
+            directory = self.output_folder / Path('IEC61131-10XML') / Path(self._program_name)
         else:
-            directory = 'IEC61131-10XML/{}'.format(self._program_name)
+            directory = Path('IEC61131-10XML') / Path(self._program_name)
         if os.path.exists(directory):
             shutil.rmtree(directory)
         os.makedirs(directory)
