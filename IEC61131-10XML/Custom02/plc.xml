@@ -54,7 +54,7 @@
 								<derived name="Reals_MultiplyByParameter"/>
 							</type>
 						</variable>
-						<variable name="r1">
+						<variable name="_1">
 							<type>
 								<REAL/>
 							</type>
@@ -66,90 +66,156 @@
 				</interface>
 				<body>
 					<FBD>
-						<inVariable localId="5" executionOrderId="0" width="10" height="10" negated="false">
-							<position x="12" y="0"/>
+						<inVariable localId="5" executionOrderId="0" width="42" height="26" negated="false">
+							<position x="8" y="0"/>
 							<connectionPointOut>
 								<relPosition x="42" y="13"/>
 							</connectionPointOut>
 							<expression>ymax</expression>
 						</inVariable>
-						<inVariable localId="6" executionOrderId="0" width="10" height="10" negated="false">
+						<inVariable localId="6" executionOrderId="0" width="50" height="26" negated="false">
 							<position x="0" y="124"/>
 							<connectionPointOut>
-								<relPosition x="42" y="13"/>
+								<relPosition x="50" y="13"/>
 							</connectionPointOut>
 							<expression>ymax1</expression>
 						</inVariable>
-						<inVariable localId="8" executionOrderId="0" width="10" height="10" negated="false">
-							<position x="50" y="100"/>
+						<inVariable localId="8" executionOrderId="0" width="26" height="26" negated="false">
+							<position x="458" y="209"/>
 							<connectionPointOut>
-								<relPosition x="42" y="13"/>
+								<relPosition x="26" y="13"/>
 							</connectionPointOut>
-							<expression>r1</expression>
+							<expression>_1</expression>
 						</inVariable>
-						<block localId="1" typeName="Reals_MultiplyByParameter" instanceName="gain" executionOrderId="0" width="20" height="20">
-							<position x="768" y="48"/>
+						<block localId="1" typeName="Reals_MultiplyByParameter" instanceName="gain" executionOrderId="0" width="210" height="60">
+							
+	
+							<position x="512" y="48"/>
+							
+	
 							<inputVariables>
+								
+		
 								<variable formalParameter="u">
 									<connectionPointIn>
-										<relPosition x="0" y="40"/>
-										<connection refLocalId="5"/>
+										<relPosition x="0" y="30"/>
+										<connection refLocalId="5">
+											<position x="512" y="78"/>
+											<position x="260" y="78"/>
+											<position x="260" y="0"/>
+											<position x="8" y="0"/>
+										</connection>
 									</connectionPointIn>
 								</variable>
 								<variable formalParameter="k">
 									<connectionPointIn>
-										<relPosition x="0" y="40"/>
-										<connection refLocalId="8"/>
+										<relPosition x="0" y="50"/>
+										<connection refLocalId="8">
+											<position x="512" y="98"/>
+											<position x="502" y="98"/>
+											<position x="502" y="98"/>
+											<position x="492" y="98"/>
+										</connection>
 									</connectionPointIn>
 								</variable>
+								
+	
 							</inputVariables>
+							
+	
 							<inOutVariables/>
+							
+	
 							<outputVariables>
+								
+		
 								<variable formalParameter="y">
 									<connectionPointOut>
-										<relPosition x="74" y="30"/>
+										<relPosition x="210" y="30"/>
 									</connectionPointOut>
 								</variable>
+								
+	
 							</outputVariables>
+							
+
 						</block>
-						<block localId="2" typeName="Reals_MultiplyByParameter" instanceName="gain1" executionOrderId="0" width="20" height="20">
-							<position x="756" y="172"/>
+						<block localId="2" typeName="Reals_MultiplyByParameter" instanceName="gain1" executionOrderId="0" width="210" height="60">
+							
+	
+							<position x="504" y="172"/>
+							
+	
 							<inputVariables>
+								
+		
 								<variable formalParameter="u">
 									<connectionPointIn>
-										<relPosition x="0" y="40"/>
-										<connection refLocalId="6"/>
+										<relPosition x="0" y="30"/>
+										<connection refLocalId="6">
+											<position x="504" y="202"/>
+											<position x="252" y="202"/>
+											<position x="252" y="124"/>
+											<position x="0" y="124"/>
+										</connection>
 									</connectionPointIn>
 								</variable>
 								<variable formalParameter="k">
 									<connectionPointIn>
-										<relPosition x="0" y="40"/>
-										<connection refLocalId="8"/>
+										<relPosition x="0" y="50"/>
+										<connection refLocalId="8">
+											<position x="504" y="222"/>
+											<position x="494" y="222"/>
+											<position x="494" y="222"/>
+											<position x="484" y="222"/>
+										</connection>
 									</connectionPointIn>
 								</variable>
+								
+	
 							</inputVariables>
+							
+	
 							<inOutVariables/>
+							
+	
 							<outputVariables>
+								
+		
 								<variable formalParameter="y">
 									<connectionPointOut>
-										<relPosition x="74" y="30"/>
+										<relPosition x="210" y="30"/>
 									</connectionPointOut>
 								</variable>
+								
+	
 							</outputVariables>
+							
+
 						</block>
-						<outVariable localId="3" executionOrderId="0" width="10" height="10" negated="false">
-							<position x="1452" y="100"/>
+						<outVariable localId="3" executionOrderId="0" width="18" height="26" negated="false">
+							<position x="968" y="100"/>
 							<connectionPointIn>
 								<relPosition x="0" y="22"/>
-								<connection refLocalId="1" formalParameter="y"/>
+								<connection refLocalId="1" formalParameter="y">
+									<position x="968" y="113"/>
+									<position x="845" y="113"/>
+									<position x="845" y="78"/>
+									<position x="722" y="78"/>
+								</connection>
 							</connectionPointIn>
 							<expression>y</expression>
 						</outVariable>
-						<outVariable localId="4" executionOrderId="0" width="10" height="10" negated="false">
-							<position x="1440" y="224"/>
+						<outVariable localId="4" executionOrderId="0" width="26" height="26" negated="false">
+							<position x="960" y="224"/>
 							<connectionPointIn>
 								<relPosition x="0" y="22"/>
-								<connection refLocalId="2" formalParameter="y"/>
+								<connection refLocalId="2" formalParameter="y">
+									<position x="960" y="237"/>
+									<position x="837" y="237"/>
+									<position x="837" y="202"/>
+									<position x="714" y="202"/>
+								</connection>
 							</connectionPointIn>
 							<expression>y1</expression>
 						</outVariable>
