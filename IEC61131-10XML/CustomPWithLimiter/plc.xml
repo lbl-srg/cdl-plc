@@ -204,34 +204,6 @@
 					</FBD>
 				</body>
 			</pou>
-			<pou name="Reals_Min" pouType="functionBlock">
-				<interface>
-					<inputVars>
-						<variable name="u1">
-							<type>
-								<REAL/>
-							</type>
-						</variable>
-						<variable name="u2">
-							<type>
-								<REAL/>
-							</type>
-						</variable>
-					</inputVars>
-					<outputVars>
-						<variable name="y">
-							<type>
-								<REAL/>
-							</type>
-						</variable>
-					</outputVars>
-				</interface>
-				<body>
-					<ST>
-						<xhtml:p><![CDATA[y := min(u1, u2);]]></xhtml:p>
-					</ST>
-				</body>
-			</pou>
 			<pou name="Reals_MultiplyByParameter" pouType="functionBlock">
 				<interface>
 					<inputVars>
@@ -257,6 +229,34 @@
 				<body>
 					<ST>
 						<xhtml:p><![CDATA[y := k * u;]]></xhtml:p>
+					</ST>
+				</body>
+			</pou>
+			<pou name="Reals_Min" pouType="functionBlock">
+				<interface>
+					<inputVars>
+						<variable name="u1">
+							<type>
+								<REAL/>
+							</type>
+						</variable>
+						<variable name="u2">
+							<type>
+								<REAL/>
+							</type>
+						</variable>
+					</inputVars>
+					<outputVars>
+						<variable name="y">
+							<type>
+								<REAL/>
+							</type>
+						</variable>
+					</outputVars>
+				</interface>
+				<body>
+					<ST>
+						<xhtml:p><![CDATA[y := min(u1, u2);]]></xhtml:p>
 					</ST>
 				</body>
 			</pou>

@@ -246,34 +246,6 @@
 					</FBD>
 				</body>
 			</pou>
-			<pou name="Reals_MultiplyByParameter" pouType="functionBlock">
-				<interface>
-					<inputVars>
-						<variable name="u">
-							<type>
-								<REAL/>
-							</type>
-						</variable>
-						<variable name="k">
-							<type>
-								<REAL/>
-							</type>
-						</variable>
-					</inputVars>
-					<outputVars>
-						<variable name="y">
-							<type>
-								<REAL/>
-							</type>
-						</variable>
-					</outputVars>
-				</interface>
-				<body>
-					<ST>
-						<xhtml:p><![CDATA[y := k * u;]]></xhtml:p>
-					</ST>
-				</body>
-			</pou>
 			      
 			<pou name="INTEGRATE" pouType="functionBlock">
 				
@@ -478,7 +450,69 @@ last := tx;
       
 			</pou>
 			
-      
+
+			<pou name="Reals_MultiplyByParameter" pouType="functionBlock">
+				<interface>
+					<inputVars>
+						<variable name="u">
+							<type>
+								<REAL/>
+							</type>
+						</variable>
+						<variable name="k">
+							<type>
+								<REAL/>
+							</type>
+						</variable>
+					</inputVars>
+					<outputVars>
+						<variable name="y">
+							<type>
+								<REAL/>
+							</type>
+						</variable>
+					</outputVars>
+				</interface>
+				<body>
+					<ST>
+						<xhtml:p><![CDATA[y := k * u;]]></xhtml:p>
+					</ST>
+				</body>
+			</pou>
+			<pou name="Reals_Limiter" pouType="functionBlock">
+				<interface>
+					<inputVars>
+						<variable name="u">
+							<type>
+								<REAL/>
+							</type>
+						</variable>
+						<variable name="uMax">
+							<type>
+								<REAL/>
+							</type>
+						</variable>
+						<variable name="uMin">
+							<type>
+								<REAL/>
+							</type>
+						</variable>
+					</inputVars>
+					<outputVars>
+						<variable name="y">
+							<type>
+								<REAL/>
+							</type>
+						</variable>
+					</outputVars>
+				</interface>
+				<body>
+					<ST>
+						<xhtml:p><![CDATA[y := min(uMax, max(uMin, u));]]></xhtml:p>
+					</ST>
+				</body>
+			</pou>
+			      
 			<pou name="T_PLC_MS" pouType="function">
 				
         
@@ -3564,39 +3598,6 @@ this is a temporary T_PLC_MS FB until OpenPLC gets itÂ´s own time() functional
 			</pou>
 			
 
-			<pou name="Reals_Limiter" pouType="functionBlock">
-				<interface>
-					<inputVars>
-						<variable name="u">
-							<type>
-								<REAL/>
-							</type>
-						</variable>
-						<variable name="uMax">
-							<type>
-								<REAL/>
-							</type>
-						</variable>
-						<variable name="uMin">
-							<type>
-								<REAL/>
-							</type>
-						</variable>
-					</inputVars>
-					<outputVars>
-						<variable name="y">
-							<type>
-								<REAL/>
-							</type>
-						</variable>
-					</outputVars>
-				</interface>
-				<body>
-					<ST>
-						<xhtml:p><![CDATA[y := min(uMax, max(uMin, u));]]></xhtml:p>
-					</ST>
-				</body>
-			</pou>
 		</pous>
 	</types>
 	<instances>
