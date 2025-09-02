@@ -1,8 +1,19 @@
 import sys
 sys.path.append('../../')
+import argparse
 import cdl_plc
 
 cxf_json_path = 'cxf/ModelicaTestCases/'
+
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    '--output',
+    type=str,
+    default='./',
+    help='Folder where translated files will be saved'
+)
+args = parser.parse_args()
+output_folder = args.output
 
 test_cases = [
     cxf_json_path + 'SingleBlocks/Reals/' + 'Add',
@@ -20,6 +31,6 @@ for test_case in test_cases:
     cxf_json = test_case + ".jsonld"
     cdl_plc.Cdl2Plc(
         cxf_json,
-        output_folder='check_translation_to_IEC_XML/',
+        output_folder=output_folder,
         debug=True,
     ).translate()
