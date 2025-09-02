@@ -247,462 +247,6 @@
 				</body>
 			</pou>
 			      
-			<pou name="INTEGRATE" pouType="functionBlock">
-				
-        
-				<interface>
-					
-          
-					<inputVars>
-						
-            
-						<variable name="_E">
-							
-              
-							<type>
-								
-                
-								<BOOL/>
-								
-              
-							</type>
-							
-              
-							<initialValue>
-								
-                
-								<simpleValue value="TRUE"/>
-								
-              
-							</initialValue>
-							
-            
-						</variable>
-						
-            
-						<variable name="X">
-							
-              
-							<type>
-								
-                
-								<REAL/>
-								
-              
-							</type>
-							
-            
-						</variable>
-						
-            
-						<variable name="K">
-							
-              
-							<type>
-								
-                
-								<REAL/>
-								
-              
-							</type>
-							
-              
-							<initialValue>
-								
-                
-								<simpleValue value="1.0"/>
-								
-              
-							</initialValue>
-							
-            
-						</variable>
-						
-          
-					</inputVars>
-					
-          
-					<inOutVars>
-						
-            
-						<variable name="Y">
-							
-              
-							<type>
-								
-                
-								<REAL/>
-								
-              
-							</type>
-							
-            
-						</variable>
-						
-          
-					</inOutVars>
-					
-          
-					<localVars>
-						
-            
-						<variable name="x_last">
-							
-              
-							<type>
-								
-                
-								<REAL/>
-								
-              
-							</type>
-							
-            
-						</variable>
-						
-            
-						<variable name="init">
-							
-              
-							<type>
-								
-                
-								<BOOL/>
-								
-              
-							</type>
-							
-            
-						</variable>
-						
-            
-						<variable name="last">
-							
-              
-							<type>
-								
-                
-								<UDINT/>
-								
-              
-							</type>
-							
-            
-						</variable>
-						
-            
-						<variable name="tx">
-							
-              
-							<type>
-								
-                
-								<UDINT/>
-								
-              
-							</type>
-							
-            
-						</variable>
-						
-          
-					</localVars>
-					
-        
-				</interface>
-				
-        
-				<body>
-					
-          
-					<ST>
-						
-            
-						<xhtml:p><![CDATA[tx:= T_PLC_MS(en:=true);
-
-IF NOT init THEN
-	init := TRUE;
-	X_last := X;
-ELSIF _E THEN
-	Y := (X + X_LAST) * 0.5E-3 * UDINT_TO_REAL(tx-last) * K + Y;
-	X_last := X;
-END_IF;
-last := tx;
-
-(* From OSCAT Library, www.oscat.de *)
-(* T_PLC_MS required *)]]></xhtml:p>
-						
-          
-					</ST>
-					
-        
-				</body>
-				
-        
-				<documentation>
-					
-          
-					<xhtml:p><![CDATA[integrate is a plain integrator with I/O for out]]></xhtml:p>
-					
-        
-				</documentation>
-				
-      
-			</pou>
-			
-
-			<pou name="Reals_MultiplyByParameter" pouType="functionBlock">
-				<interface>
-					<inputVars>
-						<variable name="u">
-							<type>
-								<REAL/>
-							</type>
-						</variable>
-						<variable name="k">
-							<type>
-								<REAL/>
-							</type>
-						</variable>
-					</inputVars>
-					<outputVars>
-						<variable name="y">
-							<type>
-								<REAL/>
-							</type>
-						</variable>
-					</outputVars>
-				</interface>
-				<body>
-					<ST>
-						<xhtml:p><![CDATA[y := k * u;]]></xhtml:p>
-					</ST>
-				</body>
-			</pou>
-			<pou name="Reals_Limiter" pouType="functionBlock">
-				<interface>
-					<inputVars>
-						<variable name="u">
-							<type>
-								<REAL/>
-							</type>
-						</variable>
-						<variable name="uMax">
-							<type>
-								<REAL/>
-							</type>
-						</variable>
-						<variable name="uMin">
-							<type>
-								<REAL/>
-							</type>
-						</variable>
-					</inputVars>
-					<outputVars>
-						<variable name="y">
-							<type>
-								<REAL/>
-							</type>
-						</variable>
-					</outputVars>
-				</interface>
-				<body>
-					<ST>
-						<xhtml:p><![CDATA[y := min(uMax, max(uMin, u));]]></xhtml:p>
-					</ST>
-				</body>
-			</pou>
-			      
-			<pou name="T_PLC_MS" pouType="function">
-				
-        
-				<interface>
-					
-          
-					<returnType>
-						
-            
-						<UDINT/>
-						
-          
-					</returnType>
-					
-          
-					<localVars>
-						
-            
-						<variable name="tx">
-							
-              
-							<type>
-								
-                
-								<UDINT/>
-								
-              
-							</type>
-							
-            
-						</variable>
-						
-          
-					</localVars>
-					
-          
-					<inputVars>
-						
-            
-						<variable name="debug">
-							
-              
-							<type>
-								
-                
-								<BOOL/>
-								
-              
-							</type>
-							
-            
-						</variable>
-						
-          
-					</inputVars>
-					
-          
-					<localVars>
-						
-            
-						<variable name="N">
-							
-              
-							<type>
-								
-                
-								<INT/>
-								
-              
-							</type>
-							
-              
-							<initialValue>
-								
-                
-								<simpleValue value="0"/>
-								
-              
-							</initialValue>
-							
-            
-						</variable>
-						
-            
-						<variable name="offset">
-							
-              
-							<type>
-								
-                
-								<UDINT/>
-								
-              
-							</type>
-							
-              
-							<initialValue>
-								
-                
-								<simpleValue value="0"/>
-								
-              
-							</initialValue>
-							
-            
-						</variable>
-						
-            
-						<variable name="temp">
-							
-              
-							<type>
-								
-                
-								<DWORD/>
-								
-              
-							</type>
-							
-              
-							<initialValue>
-								
-                
-								<simpleValue value="1"/>
-								
-              
-							</initialValue>
-							
-            
-						</variable>
-						
-          
-					</localVars>
-					
-        
-				</interface>
-				
-        
-				<body>
-					
-          
-					<ST>
-						
-            
-						<xhtml:p><![CDATA[tx := 0;
-
-{extern unsigned long __tick;
-extern unsigned long long common_ticktime__;
-unsigned long long ticktime_ms = (common_ticktime__)/1000000;
-UDINT plc_time = (UDINT)(ticktime_ms * (unsigned long long)__tick);
-TX = plc_time}
-
-T_PLC_MS := tx;
-IF debug THEN
-	T_PLC_MS := (DWORD_TO_UDINT(SHL(UDINT_TO_DWORD(T_PLC_MS),N) OR SHL(temp,N))-1) + OFFSET;
-END_IF;
-
-(* Original Code:
-tx := TIME();
-T_PLC_MS := TIME_TO_DWORD(Tx);
-IF debug THEN
-	T_PLC_MS := (SHL(T_PLC_MS,N) OR SHL(DWORD#1,N)-1) + OFFSET;
-END_IF;
-*)
-
-(* From OSCAT library, www.oscat.de
-
-this is a temporary T_PLC_MS FB until OpenPLC gets itÂ´s own time() functionality *)
-
-(* PLC_TIME and Global variables PLC_SCAN_CYCL and PLC_CYCL_TIME required *)]]></xhtml:p>
-						
-          
-					</ST>
-					
-        
-				</body>
-				
-        
-				<documentation>
-					
-          
-					<xhtml:p><![CDATA[Output current execution time in miliseconds]]></xhtml:p>
-					
-        
-				</documentation>
-				
-      
-			</pou>
-			
-      
 			<pou name="Reals_PID" pouType="functionBlock">
 				
         
@@ -3593,6 +3137,462 @@ this is a temporary T_PLC_MS FB until OpenPLC gets itÂ´s own time() functional
 					
         
 				</body>
+				
+      
+			</pou>
+			
+
+			<pou name="Reals_MultiplyByParameter" pouType="functionBlock">
+				<interface>
+					<inputVars>
+						<variable name="u">
+							<type>
+								<REAL/>
+							</type>
+						</variable>
+						<variable name="k">
+							<type>
+								<REAL/>
+							</type>
+						</variable>
+					</inputVars>
+					<outputVars>
+						<variable name="y">
+							<type>
+								<REAL/>
+							</type>
+						</variable>
+					</outputVars>
+				</interface>
+				<body>
+					<ST>
+						<xhtml:p><![CDATA[y := k * u;]]></xhtml:p>
+					</ST>
+				</body>
+			</pou>
+			<pou name="Reals_Limiter" pouType="functionBlock">
+				<interface>
+					<inputVars>
+						<variable name="u">
+							<type>
+								<REAL/>
+							</type>
+						</variable>
+						<variable name="uMax">
+							<type>
+								<REAL/>
+							</type>
+						</variable>
+						<variable name="uMin">
+							<type>
+								<REAL/>
+							</type>
+						</variable>
+					</inputVars>
+					<outputVars>
+						<variable name="y">
+							<type>
+								<REAL/>
+							</type>
+						</variable>
+					</outputVars>
+				</interface>
+				<body>
+					<ST>
+						<xhtml:p><![CDATA[y := min(uMax, max(uMin, u));]]></xhtml:p>
+					</ST>
+				</body>
+			</pou>
+			      
+			<pou name="INTEGRATE" pouType="functionBlock">
+				
+        
+				<interface>
+					
+          
+					<inputVars>
+						
+            
+						<variable name="_E">
+							
+              
+							<type>
+								
+                
+								<BOOL/>
+								
+              
+							</type>
+							
+              
+							<initialValue>
+								
+                
+								<simpleValue value="TRUE"/>
+								
+              
+							</initialValue>
+							
+            
+						</variable>
+						
+            
+						<variable name="X">
+							
+              
+							<type>
+								
+                
+								<REAL/>
+								
+              
+							</type>
+							
+            
+						</variable>
+						
+            
+						<variable name="K">
+							
+              
+							<type>
+								
+                
+								<REAL/>
+								
+              
+							</type>
+							
+              
+							<initialValue>
+								
+                
+								<simpleValue value="1.0"/>
+								
+              
+							</initialValue>
+							
+            
+						</variable>
+						
+          
+					</inputVars>
+					
+          
+					<inOutVars>
+						
+            
+						<variable name="Y">
+							
+              
+							<type>
+								
+                
+								<REAL/>
+								
+              
+							</type>
+							
+            
+						</variable>
+						
+          
+					</inOutVars>
+					
+          
+					<localVars>
+						
+            
+						<variable name="x_last">
+							
+              
+							<type>
+								
+                
+								<REAL/>
+								
+              
+							</type>
+							
+            
+						</variable>
+						
+            
+						<variable name="init">
+							
+              
+							<type>
+								
+                
+								<BOOL/>
+								
+              
+							</type>
+							
+            
+						</variable>
+						
+            
+						<variable name="last">
+							
+              
+							<type>
+								
+                
+								<UDINT/>
+								
+              
+							</type>
+							
+            
+						</variable>
+						
+            
+						<variable name="tx">
+							
+              
+							<type>
+								
+                
+								<UDINT/>
+								
+              
+							</type>
+							
+            
+						</variable>
+						
+          
+					</localVars>
+					
+        
+				</interface>
+				
+        
+				<body>
+					
+          
+					<ST>
+						
+            
+						<xhtml:p><![CDATA[tx:= T_PLC_MS(en:=true);
+
+IF NOT init THEN
+	init := TRUE;
+	X_last := X;
+ELSIF _E THEN
+	Y := (X + X_LAST) * 0.5E-3 * UDINT_TO_REAL(tx-last) * K + Y;
+	X_last := X;
+END_IF;
+last := tx;
+
+(* From OSCAT Library, www.oscat.de *)
+(* T_PLC_MS required *)]]></xhtml:p>
+						
+          
+					</ST>
+					
+        
+				</body>
+				
+        
+				<documentation>
+					
+          
+					<xhtml:p><![CDATA[integrate is a plain integrator with I/O for out]]></xhtml:p>
+					
+        
+				</documentation>
+				
+      
+			</pou>
+			
+      
+			<pou name="T_PLC_MS" pouType="function">
+				
+        
+				<interface>
+					
+          
+					<returnType>
+						
+            
+						<UDINT/>
+						
+          
+					</returnType>
+					
+          
+					<localVars>
+						
+            
+						<variable name="tx">
+							
+              
+							<type>
+								
+                
+								<UDINT/>
+								
+              
+							</type>
+							
+            
+						</variable>
+						
+          
+					</localVars>
+					
+          
+					<inputVars>
+						
+            
+						<variable name="debug">
+							
+              
+							<type>
+								
+                
+								<BOOL/>
+								
+              
+							</type>
+							
+            
+						</variable>
+						
+          
+					</inputVars>
+					
+          
+					<localVars>
+						
+            
+						<variable name="N">
+							
+              
+							<type>
+								
+                
+								<INT/>
+								
+              
+							</type>
+							
+              
+							<initialValue>
+								
+                
+								<simpleValue value="0"/>
+								
+              
+							</initialValue>
+							
+            
+						</variable>
+						
+            
+						<variable name="offset">
+							
+              
+							<type>
+								
+                
+								<UDINT/>
+								
+              
+							</type>
+							
+              
+							<initialValue>
+								
+                
+								<simpleValue value="0"/>
+								
+              
+							</initialValue>
+							
+            
+						</variable>
+						
+            
+						<variable name="temp">
+							
+              
+							<type>
+								
+                
+								<DWORD/>
+								
+              
+							</type>
+							
+              
+							<initialValue>
+								
+                
+								<simpleValue value="1"/>
+								
+              
+							</initialValue>
+							
+            
+						</variable>
+						
+          
+					</localVars>
+					
+        
+				</interface>
+				
+        
+				<body>
+					
+          
+					<ST>
+						
+            
+						<xhtml:p><![CDATA[tx := 0;
+
+{extern unsigned long __tick;
+extern unsigned long long common_ticktime__;
+unsigned long long ticktime_ms = (common_ticktime__)/1000000;
+UDINT plc_time = (UDINT)(ticktime_ms * (unsigned long long)__tick);
+TX = plc_time}
+
+T_PLC_MS := tx;
+IF debug THEN
+	T_PLC_MS := (DWORD_TO_UDINT(SHL(UDINT_TO_DWORD(T_PLC_MS),N) OR SHL(temp,N))-1) + OFFSET;
+END_IF;
+
+(* Original Code:
+tx := TIME();
+T_PLC_MS := TIME_TO_DWORD(Tx);
+IF debug THEN
+	T_PLC_MS := (SHL(T_PLC_MS,N) OR SHL(DWORD#1,N)-1) + OFFSET;
+END_IF;
+*)
+
+(* From OSCAT library, www.oscat.de
+
+this is a temporary T_PLC_MS FB until OpenPLC gets itÂ´s own time() functionality *)
+
+(* PLC_TIME and Global variables PLC_SCAN_CYCL and PLC_CYCL_TIME required *)]]></xhtml:p>
+						
+          
+					</ST>
+					
+        
+				</body>
+				
+        
+				<documentation>
+					
+          
+					<xhtml:p><![CDATA[Output current execution time in miliseconds]]></xhtml:p>
+					
+        
+				</documentation>
 				
       
 			</pou>
