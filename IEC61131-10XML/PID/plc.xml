@@ -275,6 +275,210 @@
 				</body>
 			</pou>
 			      
+			<pou name="INTEGRATE" pouType="functionBlock">
+				
+        
+				<interface>
+					
+          
+					<inputVars>
+						
+            
+						<variable name="_E">
+							
+              
+							<type>
+								
+                
+								<BOOL/>
+								
+              
+							</type>
+							
+              
+							<initialValue>
+								
+                
+								<simpleValue value="TRUE"/>
+								
+              
+							</initialValue>
+							
+            
+						</variable>
+						
+            
+						<variable name="X">
+							
+              
+							<type>
+								
+                
+								<REAL/>
+								
+              
+							</type>
+							
+            
+						</variable>
+						
+            
+						<variable name="K">
+							
+              
+							<type>
+								
+                
+								<REAL/>
+								
+              
+							</type>
+							
+              
+							<initialValue>
+								
+                
+								<simpleValue value="1.0"/>
+								
+              
+							</initialValue>
+							
+            
+						</variable>
+						
+          
+					</inputVars>
+					
+          
+					<inOutVars>
+						
+            
+						<variable name="Y">
+							
+              
+							<type>
+								
+                
+								<REAL/>
+								
+              
+							</type>
+							
+            
+						</variable>
+						
+          
+					</inOutVars>
+					
+          
+					<localVars>
+						
+            
+						<variable name="x_last">
+							
+              
+							<type>
+								
+                
+								<REAL/>
+								
+              
+							</type>
+							
+            
+						</variable>
+						
+            
+						<variable name="init">
+							
+              
+							<type>
+								
+                
+								<BOOL/>
+								
+              
+							</type>
+							
+            
+						</variable>
+						
+            
+						<variable name="last">
+							
+              
+							<type>
+								
+                
+								<UDINT/>
+								
+              
+							</type>
+							
+            
+						</variable>
+						
+            
+						<variable name="tx">
+							
+              
+							<type>
+								
+                
+								<UDINT/>
+								
+              
+							</type>
+							
+            
+						</variable>
+						
+          
+					</localVars>
+					
+        
+				</interface>
+				
+        
+				<body>
+					
+          
+					<ST>
+						
+            
+						<xhtml:p><![CDATA[tx:= T_PLC_MS(en:=true);
+
+IF NOT init THEN
+	init := TRUE;
+	X_last := X;
+ELSIF _E THEN
+	Y := (X + X_LAST) * 0.5E-3 * UDINT_TO_REAL(tx-last) * K + Y;
+	X_last := X;
+END_IF;
+last := tx;
+
+(* From OSCAT Library, www.oscat.de *)
+(* T_PLC_MS required *)]]></xhtml:p>
+						
+          
+					</ST>
+					
+        
+				</body>
+				
+        
+				<documentation>
+					
+          
+					<xhtml:p><![CDATA[integrate is a plain integrator with I/O for out]]></xhtml:p>
+					
+        
+				</documentation>
+				
+      
+			</pou>
+			
+      
 			<pou name="T_PLC_MS" pouType="function">
 				
         
@@ -464,41 +668,7 @@ this is a temporary T_PLC_MS FB until OpenPLC gets itÂ´s own time() functional
       
 			</pou>
 			
-
-			<pou name="Reals_Limiter" pouType="functionBlock">
-				<interface>
-					<inputVars>
-						<variable name="u">
-							<type>
-								<REAL/>
-							</type>
-						</variable>
-						<variable name="uMax">
-							<type>
-								<REAL/>
-							</type>
-						</variable>
-						<variable name="uMin">
-							<type>
-								<REAL/>
-							</type>
-						</variable>
-					</inputVars>
-					<outputVars>
-						<variable name="y">
-							<type>
-								<REAL/>
-							</type>
-						</variable>
-					</outputVars>
-				</interface>
-				<body>
-					<ST>
-						<xhtml:p><![CDATA[y := min(uMax, max(uMin, u));]]></xhtml:p>
-					</ST>
-				</body>
-			</pou>
-			      
+      
 			<pou name="Reals_PID" pouType="functionBlock">
 				
         
@@ -3393,211 +3563,40 @@ this is a temporary T_PLC_MS FB until OpenPLC gets itÂ´s own time() functional
       
 			</pou>
 			
-      
-			<pou name="INTEGRATE" pouType="functionBlock">
-				
-        
+
+			<pou name="Reals_Limiter" pouType="functionBlock">
 				<interface>
-					
-          
 					<inputVars>
-						
-            
-						<variable name="_E">
-							
-              
+						<variable name="u">
 							<type>
-								
-                
-								<BOOL/>
-								
-              
-							</type>
-							
-              
-							<initialValue>
-								
-                
-								<simpleValue value="TRUE"/>
-								
-              
-							</initialValue>
-							
-            
-						</variable>
-						
-            
-						<variable name="X">
-							
-              
-							<type>
-								
-                
 								<REAL/>
-								
-              
 							</type>
-							
-            
 						</variable>
-						
-            
-						<variable name="K">
-							
-              
+						<variable name="uMax">
 							<type>
-								
-                
 								<REAL/>
-								
-              
 							</type>
-							
-              
-							<initialValue>
-								
-                
-								<simpleValue value="1.0"/>
-								
-              
-							</initialValue>
-							
-            
 						</variable>
-						
-          
+						<variable name="uMin">
+							<type>
+								<REAL/>
+							</type>
+						</variable>
 					</inputVars>
-					
-          
-					<inOutVars>
-						
-            
-						<variable name="Y">
-							
-              
+					<outputVars>
+						<variable name="y">
 							<type>
-								
-                
 								<REAL/>
-								
-              
 							</type>
-							
-            
 						</variable>
-						
-          
-					</inOutVars>
-					
-          
-					<localVars>
-						
-            
-						<variable name="x_last">
-							
-              
-							<type>
-								
-                
-								<REAL/>
-								
-              
-							</type>
-							
-            
-						</variable>
-						
-            
-						<variable name="init">
-							
-              
-							<type>
-								
-                
-								<BOOL/>
-								
-              
-							</type>
-							
-            
-						</variable>
-						
-            
-						<variable name="last">
-							
-              
-							<type>
-								
-                
-								<UDINT/>
-								
-              
-							</type>
-							
-            
-						</variable>
-						
-            
-						<variable name="tx">
-							
-              
-							<type>
-								
-                
-								<UDINT/>
-								
-              
-							</type>
-							
-            
-						</variable>
-						
-          
-					</localVars>
-					
-        
+					</outputVars>
 				</interface>
-				
-        
 				<body>
-					
-          
 					<ST>
-						
-            
-						<xhtml:p><![CDATA[tx:= T_PLC_MS(en:=true);
-
-IF NOT init THEN
-	init := TRUE;
-	X_last := X;
-ELSIF _E THEN
-	Y := (X + X_LAST) * 0.5E-3 * UDINT_TO_REAL(tx-last) * K + Y;
-	X_last := X;
-END_IF;
-last := tx;
-
-(* From OSCAT Library, www.oscat.de *)
-(* T_PLC_MS required *)]]></xhtml:p>
-						
-          
+						<xhtml:p><![CDATA[y := min(uMax, max(uMin, u));]]></xhtml:p>
 					</ST>
-					
-        
 				</body>
-				
-        
-				<documentation>
-					
-          
-					<xhtml:p><![CDATA[integrate is a plain integrator with I/O for out]]></xhtml:p>
-					
-        
-				</documentation>
-				
-      
 			</pou>
-			
-
 		</pous>
 	</types>
 	<instances>
