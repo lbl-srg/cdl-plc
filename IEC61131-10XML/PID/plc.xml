@@ -3575,7 +3575,7 @@ END_IF;
 
 (* From OSCAT library, www.oscat.de
 
-this is a temporary T_PLC_MS FB until OpenPLC gets itÂ´s own time() functionality *)
+this is a temporary T_PLC_MS FB until OpenPLC gets it's own time() functionality *)
 
 (* PLC_TIME and Global variables PLC_SCAN_CYCL and PLC_CYCL_TIME required *)]]></xhtml:p>
 						
