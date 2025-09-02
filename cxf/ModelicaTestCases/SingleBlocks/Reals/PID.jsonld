@@ -45,6 +45,12 @@
         },
         {
           "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.PID.conPID.y"
+        },
+        {
+          "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.PID.conPID.yMax"
+        },
+        {
+          "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.PID.conPID.yMin"
         }
       ],
       "S231P:label": "conPID"
@@ -66,6 +72,14 @@
       "S231P:isConnectedTo": {
         "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.PID.y"
       }
+    },
+    {
+      "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.PID.conPID.yMax",
+      "S231P:value": 1
+    },
+    {
+      "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.PID.conPID.yMin",
+      "S231P:value": 0
     },
     {
       "@id": "http://example.org#ModelicaTestCases.SingleBlocks.Reals.PID.u_m",
