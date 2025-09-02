@@ -7,9 +7,23 @@ cdl-plc translates control sequences in the Control Description Language (CDL) t
 ## CDL-support
 
 The translator currently only supports control sequences including the following selected CDL blocks:
+- Conversions.BooleanToInteger
+- Conversions.BooleanToReal
+- Logical.And
+- Logical.Not
 - Reals.Add
+- Reals.Greater
+- Reals.Hysteresis
+- Reals.Limiter
+- Reals.Line
+- Reals.MovingAverage
+- Reals.Multiply
 - Reals.MultiplyByParameter
 - Reals.Min
+- Reals.PID
+- Reals.Sources.Constant
+- Reals.Subtract
+- Reals.Switch.Constant
 
 The aim of this version is to demonstrate the general feasability of the translation from CXF / `.jsonld` in the 61131-10 XML, including the creation of the XML structure, the connection of inputs / outputs or the handling of parameters. Further developments are required to cover the full scope of CDL.
 
